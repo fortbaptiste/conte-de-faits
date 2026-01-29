@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devis DEV-2025-001 - Automatisation IA Prestashop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background: white;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: white;
+            page-break-after: always;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #C9A962;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+
+        .logo span { color: #C9A962; }
+
+        .devis-info {
+            text-align: right;
+        }
+
+        .devis-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: #C9A962;
+            margin-bottom: 5px;
+        }
+
+        .devis-date {
+            color: #666;
+            font-size: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .client-box {
+            background: #f8f8f8;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #C9A962;
+        }
+
+        .client-box h3 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .client-box p {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .section-title span {
+            color: #C9A962;
+            margin-right: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background: #f0f0f0;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .item-desc {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .price {
+            text-align: right;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .total-section {
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .total-row.main {
+            font-size: 20px;
+            font-weight: 700;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .total-row.main .amount {
+            color: #C9A962;
+        }
+
+        .payment-info {
+            background: #C9A962;
+            color: #1a1a1a;
+            padding: 15px 20px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: #f8f8f8;
+            border-top: 3px solid #C9A962;
+        }
+
+        .timeline-item .month {
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .timeline-item .content {
+            font-size: 9px;
+            color: #666;
+        }
+
+        .conditions {
+            font-size: 10px;
+            color: #666;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .conditions h4 {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .conditions ul {
+            padding-left: 15px;
+        }
+
+        .conditions li {
+            margin-bottom: 5px;
+        }
+
+        .signature-area {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            width: 45%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            min-height: 100px;
+        }
+
+        .signature-box h4 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 3px solid #C9A962;
+            text-align: center;
+            font-size: 9px;
+            color: #999;
+        }
+
+        .footer strong {
+            color: #1a1a1a;
+        }
+
+        .page-2-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #C9A962;
+        }
+
+        .checklist {
+            columns: 2;
+            column-gap: 30px;
+        }
+
+        .checklist li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            break-inside: avoid;
+        }
+
+        .checklist li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #C9A962;
+            font-weight: bold;
+        }
+
+        .costs-table td:last-child {
+            text-align: right;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 -->
+    <div class="page">
+        <div class="header">
+            <div>
+                <div class="logo">BAPTISTE<span>/</span>FORT</div>
+                <div style="font-size: 10px; color: #666; margin-top: 5px;">Automatisation & IA</div>
+            </div>
+            <div class="devis-info">
+                <div class="devis-number">DEV-2025-001</div>
+                <div class="devis-date">Date : 8 décembre 2024</div>
+                <div class="devis-date">Validité : 30 jours</div>
+            </div>
+        </div>
+
+        <h1 class="title">Devis Automatisation IA Prestashop</h1>
+        <p class="subtitle">Infrastructure complète : Chatbot SAV 24/7, Blog SEO automatisé, Gestion des avis</p>
+
+        <div class="client-box">
+            <h3>Client</h3>
+            <p><strong>Cosse & Co SARL</strong><br>
+            ZA La Rafette - 27 Rue Gutenberg<br>
+            33450 SAINT-LOUBÈS<br>
+            SIRET: 799 133 491 00016</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><span>01</span> Prestations</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60%">Description</th>
+                        <th style="width: 20%">Période</th>
+                        <th style="width: 20%">Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="item-title">Chatbot SAV Automatisé</div>
+                            <div class="item-desc">Mémoire produit complète, chatbot IA multilingue (FR/EN/DE/ES), intégration Prestashop, tests et fine-tuning</div>
+                        </td>
+                        <td>Janvier-Février 2025</td>
+                        <td class="price">2 960 €</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-title">Blog SEO Automatisé</div>
+                            <div class="item-desc">Audit SEO, base Airtable 450-500 sujets, système génération articles (H1/H2/H3, liens internes), publication auto</div>
+                        </td>
+                        <td>Mars-Avril 2025</td>
+                        <td class="price">2 960 €</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="item-title">Gestion Avis Automatisée + Optimisations</div>
+                            <div class="item-desc">Récupération avis multi-plateformes, analyse tonalité, réponses contextualisées, dashboard suivi, optimisations globales</div>
+                        </td>
+                        <td>Mai 2025</td>
+                        <td class="price">1 480 €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-section">
+            <div class="total-row">
+                <span>Total HT</span>
+                <span>6 166,67 €</span>
+            </div>
+            <div class="total-row">
+                <span>TVA (20%)</span>
+                <span>1 233,33 €</span>
+            </div>
+            <div class="total-row main">
+                <span>Total TTC</span>
+                <span class="amount">7 400 €</span>
+            </div>
+        </div>
+
+        <div class="payment-info">
+            <strong>Modalités de paiement :</strong> 1 480 € TTC / mois pendant 5 mois (Janvier → Mai 2025)
+        </div>
+
+        <div class="section" style="margin-top: 30px;">
+            <div class="section-title"><span>02</span> Planning</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="month">JANV.</div>
+                    <div class="content">SAV Phase 1<br>Mémoire produit</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="month">FÉV.</div>
+                    <div class="content">SAV Phase 2<br>Chatbot live</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="month">MARS</div>
+                    <div class="content">Blog Phase 1<br>Audit + Base</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="month">AVR.</div>
+                    <div class="content">Blog Phase 2<br>Publication auto</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="month">MAI</div>
+                    <div class="content">Avis + Optim.<br>Système complet</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Baptiste Fort</strong> • Automatisation & Intelligence Artificielle<br>
+            contact@baptistefort.com • 06 26 10 56 40
+        </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page">
+        <div class="header">
+            <div>
+                <div class="logo">BAPTISTE<span>/</span>FORT</div>
+            </div>
+            <div class="devis-info">
+                <div class="devis-number">DEV-2025-001</div>
+                <div class="devis-date">Page 2/2</div>
+            </div>
+        </div>
+
+        <h2 class="page-2-title">Détail des prestations incluses</h2>
+
+        <div class="section">
+            <ul class="checklist" style="list-style: none; padding: 0;">
+                <li>Construction mémoire centrale complète</li>
+                <li>API Prestashop ou extraction site</li>
+                <li>Serveur n8n + workflows d'automatisation</li>
+                <li>Chatbot SAV multilingue (FR, EN, DE, ES)</li>
+                <li>Audit SEO via SERP API</li>
+                <li>Base Airtable 450-500 sujets SEO</li>
+                <li>Système génération auto articles</li>
+                <li>Structure H1/H2/H3, liens, mots clés</li>
+                <li>Publication automatique blog</li>
+                <li>Récupération auto avis (Prestashop, Google, Trustpilot)</li>
+                <li>Analyse tonalité IA</li>
+                <li>Génération réponses contextualisées</li>
+                <li>Dashboard suivi avis</li>
+                <li>Intégration complète Prestashop</li>
+                <li>Tests réels et ajustements</li>
+                <li>Formation pour ton équipe</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><span>03</span> Coûts mensuels après projet (à votre charge)</div>
+            <table class="costs-table">
+                <tr>
+                    <td>VPS n8n (hébergement workflows)</td>
+                    <td>~8 €/mois</td>
+                </tr>
+                <tr>
+                    <td>Base vecteur (mémoire IA)</td>
+                    <td>0-4 €/mois</td>
+                </tr>
+                <tr>
+                    <td>Airtable (optionnel)</td>
+                    <td>~12-20 €/mois</td>
+                </tr>
+                <tr>
+                    <td>LLM API chatbot (usage)</td>
+                    <td>~0,002-0,02 € / conversation</td>
+                </tr>
+                <tr>
+                    <td>LLM articles (génération)</td>
+                    <td>~0,08 € / article</td>
+                </tr>
+                <tr style="background: #f8f8f8; font-weight: 600;">
+                    <td>Total estimé mensuel</td>
+                    <td>30-50 €/mois</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="conditions">
+            <h4>Conditions générales</h4>
+            <ul>
+                <li><strong>Paiement :</strong> 1 480 € TTC par mois pendant 5 mois (Janvier à Mai 2025)</li>
+                <li><strong>Confidentialité :</strong> Toutes vos données restent 100% votre propriété</li>
+                <li><strong>Non inclus :</strong> Maintenance post-projet (sur devis séparé), modifications majeures structure Prestashop</li>
+                <li><strong>Validité :</strong> Ce devis est valable 30 jours à compter de sa date d'émission</li>
+            </ul>
+        </div>
+
+        <div class="signature-area">
+            <div class="signature-box">
+                <h4>Le prestataire</h4>
+                <p style="font-size: 10px; color: #666;">Baptiste Fort<br>Date :</p>
+            </div>
+            <div class="signature-box">
+                <h4>Le client (bon pour accord)</h4>
+                <p style="font-size: 10px; color: #666;">Cosse & Co SARL<br>Date :<br><br>Signature :</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Baptiste Fort</strong> • Automatisation & Intelligence Artificielle<br>
+            contact@baptistefort.com • 06 26 10 56 40
+        </div>
+    </div>
+
+</body>
+</html>

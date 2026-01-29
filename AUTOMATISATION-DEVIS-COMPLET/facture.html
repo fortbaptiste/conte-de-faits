@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTURE /// Migration Contacts Hektor Apimo</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            max-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            padding: 15mm;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8mm;
+            border-bottom: 3px solid #1a1a1a;
+            padding-bottom: 5mm;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .title span {
+            color: #FF4D00;
+        }
+
+        .meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            text-align: right;
+        }
+
+        .meta strong {
+            color: #FF4D00;
+        }
+
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5mm;
+            margin-bottom: 8mm;
+        }
+
+        .party {
+            padding: 4mm;
+            border: 2px solid #1a1a1a;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+        }
+
+        .party.from {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .party h3 {
+            font-size: 11px;
+            margin-bottom: 3mm;
+            border-bottom: 1px solid currentColor;
+            padding-bottom: 2mm;
+        }
+
+        .party .name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2mm;
+        }
+
+        .party.from .name {
+            color: #FACC15;
+        }
+
+        .table {
+            border: 3px solid #1a1a1a;
+            margin-bottom: 5mm;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 100px;
+            background: #1a1a1a;
+            color: white;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3mm;
+        }
+
+        .table-body {
+            padding: 4mm;
+        }
+
+        .table-body h4 {
+            font-size: 14px;
+            margin-bottom: 3mm;
+        }
+
+        .table-body ul {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            margin-left: 4mm;
+            color: #666;
+        }
+
+        .table-body li {
+            margin-bottom: 1mm;
+        }
+
+        .table-footer {
+            display: grid;
+            grid-template-columns: 1fr 100px;
+            border-top: 3px solid #1a1a1a;
+            background: #f5f5f5;
+        }
+
+        .table-footer div {
+            padding: 3mm;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+        }
+
+        .table-footer div:first-child {
+            text-align: right;
+            border-right: 3px solid #1a1a1a;
+            font-size: 11px;
+        }
+
+        .table-footer div:last-child {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .bottom {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 5mm;
+            margin-bottom: 5mm;
+        }
+
+        .bank {
+            padding: 4mm;
+            border: 2px solid #1a1a1a;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            background: #fafafa;
+        }
+
+        .bank h4 {
+            font-size: 10px;
+            margin-bottom: 3mm;
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 2mm;
+        }
+
+        .bank .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1mm;
+        }
+
+        .bank .iban {
+            background: #eee;
+            padding: 2mm;
+            margin-top: 2mm;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .total-box {
+            background: #FF4D00;
+            border: 3px solid #1a1a1a;
+            padding: 5mm;
+            text-align: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .total-box .label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            margin-bottom: 2mm;
+        }
+
+        .total-box .amount {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stamp {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stamp-box {
+            border: 3px solid #f59e0b;
+            color: #f59e0b;
+            padding: 3mm 5mm;
+            font-weight: 700;
+            font-size: 12px;
+            transform: rotate(-5deg);
+            text-align: center;
+        }
+
+        .stamp-box small {
+            display: block;
+            font-size: 9px;
+            margin-top: 1mm;
+        }
+
+        .tva-note {
+            font-family: 'Space Mono', monospace;
+            font-size: 8px;
+            color: #888;
+        }
+
+        .footer {
+            margin-top: 5mm;
+            padding-top: 3mm;
+            border-top: 1px solid #ddd;
+            font-family: 'Space Mono', monospace;
+            font-size: 8px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <div>
+                <div class="title">FACT<span>URE</span></div>
+                <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: #888; margin-top: 2mm;">
+                    DOCUMENT OFFICIEL</div>
+            </div>
+            <div class="meta">
+                <div>N° <strong>FA-2026-01-003</strong></div>
+                <div>Date: <strong>--/--/2026</strong></div>
+                <div>Période: <strong>À définir</strong></div>
+            </div>
+        </div>
+
+        <div class="parties">
+            <div class="party from">
+                <h3>ÉMETTEUR</h3>
+                <div class="name">BAPTISTE FORT</div>
+                <div>Développement & Automatisation</div>
+                <div style="margin-top: 2mm;">1 RUE DU ROI DAGOBERT</div>
+                <div>94130 NOGENT-SUR-MARNE</div>
+                <div style="margin-top: 2mm; opacity: 0.7;">SIRET: 90939247400013</div>
+            </div>
+            <div class="party">
+                <h3>DESTINATAIRE</h3>
+                <div class="name">RÉSEAU BONAPARTE</div>
+                <div>SAS au capital de 12 829,00 €</div>
+                <div style="margin-top: 2mm;">26 AVENUE JEAN KUNTZMANN</div>
+                <div>38330 MONTBONNOT-SAINT-MARTIN</div>
+                <div style="margin-top: 2mm; color: #888;">SIRET: 839 121 126 00024</div>
+            </div>
+        </div>
+
+        <div class="table">
+            <div class="table-header">
+                <div>DÉSIGNATION</div>
+                <div style="text-align: right;">MONTANT HT</div>
+            </div>
+            <div class="table-body">
+                <h4>Migration Contacts Hektor → Apimo</h4>
+                <ul>
+                    <li>Export et parsing XML (2 250 propriétaires + 12 224 acquéreurs)</li>
+                    <li>Mapping et transformation des données</li>
+                    <li>Injection API REST Apimo (14 474 contacts)</li>
+                </ul>
+            </div>
+            <div class="table-footer">
+                <div>TOTAL HT</div>
+                <div>1 400,00 €</div>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="bank">
+                <h4>COORDONNÉES BANCAIRES</h4>
+                <div class="row"><span>Titulaire</span><strong>BAPTISTE FORT</strong></div>
+                <div class="row"><span>Banque</span><strong>CREDIT MUTUEL</strong></div>
+                <div class="row"><span>BIC</span><span>CMCIFR2A</span></div>
+                <div class="iban">FR76 1027 8060 2000 0200 0750 590</div>
+            </div>
+            <div class="total-box">
+                <div class="label">NET À PAYER</div>
+                <div class="amount">1 400,00 €</div>
+            </div>
+        </div>
+
+        <div class="stamp">
+            <div class="tva-note">TVA non applicable selon l'article 293 B du CGI</div>
+            <div class="stamp-box">
+                EN ATTENTE
+                <small>Devis non validé</small>
+            </div>
+        </div>
+
+        <div class="footer">
+            BAPTISTE FORT — SIRET 90939247400013 — 1 RUE DU ROI DAGOBERT 94130 NOGENT-SUR-MARNE
+        </div>
+    </div>
+</body>
+
+</html>

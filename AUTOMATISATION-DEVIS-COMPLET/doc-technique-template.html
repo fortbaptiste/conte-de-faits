@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation Technique - {{TITRE_PROJET}}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @page { size: A4; margin: 15mm; }
+        body { font-family: 'Inter', sans-serif; font-size: 10px; line-height: 1.6; color: #1a1a1a; background: white; }
+        .page { width: 210mm; min-height: 297mm; padding: 15mm; margin: 0 auto; background: white; page-break-after: always; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #C9A962; }
+        .logo { font-weight: 700; font-size: 20px; }
+        .logo span { color: #C9A962; }
+        .doc-type { background: #1a1a1a; color: #C9A962; padding: 5px 12px; font-size: 9px; font-weight: 600; letter-spacing: 1px; }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
+        h2 { font-size: 14px; font-weight: 700; background: #1a1a1a; color: white; padding: 8px 12px; margin: 20px 0 12px 0; }
+        h2 span { color: #C9A962; margin-right: 8px; }
+        h3 { font-size: 11px; font-weight: 600; color: #C9A962; margin: 15px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        p { margin-bottom: 8px; }
+        .subtitle { color: #666; font-size: 12px; margin-bottom: 20px; }
+        .intro-box { background: #f8f8f8; padding: 15px; border-left: 4px solid #C9A962; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0 15px 0; font-size: 9px; }
+        th { background: #f0f0f0; padding: 8px; text-align: left; font-weight: 600; border-bottom: 2px solid #1a1a1a; }
+        td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .code { font-family: 'JetBrains Mono', monospace; background: #1a1a1a; color: #C9A962; padding: 10px; font-size: 9px; margin: 10px 0; border-radius: 4px; }
+        ul { padding-left: 15px; margin: 8px 0; }
+        li { margin-bottom: 4px; }
+        .schema { background: #f8f8f8; padding: 15px; margin: 15px 0; text-align: center; border: 1px solid #ddd; }
+        .schema-box { display: inline-block; background: white; border: 2px solid #1a1a1a; padding: 8px 15px; margin: 5px; font-weight: 600; font-size: 9px; }
+        .schema-arrow { color: #C9A962; font-weight: bold; margin: 0 5px; }
+        .footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center; font-size: 8px; color: #999; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .box { background: #f8f8f8; padding: 12px; border-left: 3px solid #C9A962; }
+        .box-title { font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header">
+        <div>
+            <div class="logo">BAPTISTE<span>/</span>FORT</div>
+        </div>
+        <div class="doc-type">DOCUMENTATION TECHNIQUE</div>
+    </div>
+
+    <h1>{{TITRE_PROJET}}</h1>
+    <p class="subtitle">{{CLIENT_NOM}} - {{NUMERO_DEVIS}} - {{PERIODE_PROJET}}</p>
+
+    <div class="intro-box">
+        <strong>Objet :</strong> {{DESCRIPTION_PROJET}}
+    </div>
+
+    <h2><span>01</span> Architecture Globale</h2>
+
+    <div class="schema">
+        {{SCHEMA_ARCHITECTURE}}
+    </div>
+
+    <h3>Stack Technique</h3>
+    <table>
+        <tr><th>Composant</th><th>Technologie</th><th>Role</th></tr>
+        {{STACK_TECHNIQUE_ROWS}}
+    </table>
+
+    {{MODULES_PAGE_1}}
+
+    <div class="footer">Documentation Technique - {{NUMERO_DEVIS}} - Page 1/3</div>
+</div>
+
+<div class="page">
+    <div class="header">
+        <div><div class="logo">BAPTISTE<span>/</span>FORT</div></div>
+        <div class="doc-type">DOCUMENTATION TECHNIQUE</div>
+    </div>
+
+    {{MODULES_PAGE_2}}
+
+    <div class="footer">Documentation Technique - {{NUMERO_DEVIS}} - Page 2/3</div>
+</div>
+
+<div class="page">
+    <div class="header">
+        <div><div class="logo">BAPTISTE<span>/</span>FORT</div></div>
+        <div class="doc-type">DOCUMENTATION TECHNIQUE</div>
+    </div>
+
+    <h2><span>05</span> Infrastructure & Deploiement</h2>
+
+    <h3>Serveur</h3>
+    <table>
+        <tr><th>Specification</th><th>Valeur</th></tr>
+        {{SPECS_SERVEUR_ROWS}}
+    </table>
+
+    <h3>Workflows Principaux</h3>
+    <table>
+        <tr><th>Workflow</th><th>Trigger</th><th>Actions</th></tr>
+        {{WORKFLOWS_ROWS}}
+    </table>
+
+    <h2><span>06</span> Securite & Donnees</h2>
+
+    <div class="grid-2">
+        <div class="box">
+            <div class="box-title">Protection des donnees</div>
+            <ul>
+                <li>HTTPS sur tous les endpoints</li>
+                <li>Authentification API (tokens)</li>
+                <li>Donnees client jamais envoyees au LLM</li>
+                <li>Logs anonymises</li>
+                <li>Backup quotidien</li>
+            </ul>
+        </div>
+        <div class="box">
+            <div class="box-title">Propriete</div>
+            <ul>
+                <li>Code workflows : propriete client</li>
+                <li>Donnees : 100% propriete client</li>
+                <li>Contenu genere : propriete client</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span>07</span> Couts Operationnels Mensuels</h2>
+
+    <table>
+        <tr><th>Service</th><th>Usage estime</th><th>Cout</th></tr>
+        {{COUTS_OPERATIONNELS_ROWS}}
+        <tr style="background: #f8f8f8; font-weight: 600;"><td>TOTAL ESTIME</td><td></td><td>{{TOTAL_MENSUEL}}</td></tr>
+    </table>
+
+    <h2><span>08</span> Formation & Autonomie</h2>
+
+    <ul>
+        {{FORMATION_ITEMS}}
+    </ul>
+
+    <div class="footer">Documentation Technique - {{NUMERO_DEVIS}} - Page 3/3 - Baptiste Fort</div>
+</div>
+
+</body>
+</html>

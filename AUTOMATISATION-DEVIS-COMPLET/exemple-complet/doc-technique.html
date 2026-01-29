@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation Technique - Automatisation IA Prestashop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @page { size: A4; margin: 15mm; }
+        body { font-family: 'Inter', sans-serif; font-size: 10px; line-height: 1.6; color: #1a1a1a; background: white; }
+        .page { width: 210mm; min-height: 297mm; padding: 15mm; margin: 0 auto; background: white; page-break-after: always; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #C9A962; }
+        .logo { font-weight: 700; font-size: 20px; }
+        .logo span { color: #C9A962; }
+        .doc-type { background: #1a1a1a; color: #C9A962; padding: 5px 12px; font-size: 9px; font-weight: 600; letter-spacing: 1px; }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
+        h2 { font-size: 14px; font-weight: 700; background: #1a1a1a; color: white; padding: 8px 12px; margin: 20px 0 12px 0; }
+        h2 span { color: #C9A962; margin-right: 8px; }
+        h3 { font-size: 11px; font-weight: 600; color: #C9A962; margin: 15px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        p { margin-bottom: 8px; }
+        .subtitle { color: #666; font-size: 12px; margin-bottom: 20px; }
+        .intro-box { background: #f8f8f8; padding: 15px; border-left: 4px solid #C9A962; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0 15px 0; font-size: 9px; }
+        th { background: #f0f0f0; padding: 8px; text-align: left; font-weight: 600; border-bottom: 2px solid #1a1a1a; }
+        td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .code { font-family: 'JetBrains Mono', monospace; background: #1a1a1a; color: #C9A962; padding: 10px; font-size: 9px; margin: 10px 0; border-radius: 4px; }
+        ul { padding-left: 15px; margin: 8px 0; }
+        li { margin-bottom: 4px; }
+        .schema { background: #f8f8f8; padding: 15px; margin: 15px 0; text-align: center; border: 1px solid #ddd; }
+        .schema-box { display: inline-block; background: white; border: 2px solid #1a1a1a; padding: 8px 15px; margin: 5px; font-weight: 600; font-size: 9px; }
+        .schema-arrow { color: #C9A962; font-weight: bold; margin: 0 5px; }
+        .footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center; font-size: 8px; color: #999; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .box { background: #f8f8f8; padding: 12px; border-left: 3px solid #C9A962; }
+        .box-title { font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header">
+        <div>
+            <div class="logo">BAPTISTE<span>/</span>FORT</div>
+        </div>
+        <div class="doc-type">DOCUMENTATION TECHNIQUE</div>
+    </div>
+
+    <h1>Automatisation IA Prestashop</h1>
+    <p class="subtitle">Cosse & Co SARL • DEV-2025-001 • Janvier-Mai 2025</p>
+
+    <div class="intro-box">
+        <strong>Objet :</strong> Infrastructure d'automatisation IA complète intégrant un chatbot SAV multilingue 24/7, un système de génération de contenu SEO automatisé, et une gestion centralisée des avis clients avec analyse de sentiment.
+    </div>
+
+    <h2><span>01</span> Architecture Globale</h2>
+
+    <div class="schema">
+        <div class="schema-box">PRESTASHOP</div>
+        <span class="schema-arrow">→</span>
+        <div class="schema-box">n8n (Orchestrateur)</div>
+        <span class="schema-arrow">→</span>
+        <div class="schema-box">MÉMOIRE CENTRALE</div>
+        <br><br>
+        <div class="schema-box">LLM API</div>
+        <span class="schema-arrow">↔</span>
+        <div class="schema-box">CHATBOT</div>
+        <span class="schema-arrow">|</span>
+        <div class="schema-box">BLOG</div>
+        <span class="schema-arrow">|</span>
+        <div class="schema-box">AVIS</div>
+    </div>
+
+    <h3>Stack Technique</h3>
+    <table>
+        <tr><th>Composant</th><th>Technologie</th><th>Rôle</th></tr>
+        <tr><td>Orchestration</td><td>n8n (self-hosted)</td><td>Coordination de tous les workflows automatisés</td></tr>
+        <tr><td>Base de données</td><td>PostgreSQL / Supabase</td><td>Stockage données structurées</td></tr>
+        <tr><td>Mémoire vectorielle</td><td>Pinecone / Qdrant</td><td>Recherche sémantique produits et FAQ</td></tr>
+        <tr><td>LLM</td><td>OpenAI GPT-4 / Claude</td><td>Génération texte et analyse sentiment</td></tr>
+        <tr><td>Gestion contenu</td><td>Airtable</td><td>Base articles SEO (450-500 sujets)</td></tr>
+        <tr><td>E-commerce</td><td>Prestashop API</td><td>Sync produits, commandes, clients</td></tr>
+    </table>
+
+    <h2><span>02</span> Module 1 : Chatbot SAV</h2>
+
+    <h3>Fonctionnalités</h3>
+    <ul>
+        <li>Réponse automatique 24/7 aux questions clients</li>
+        <li>Multilingue : Français, Anglais, Allemand, Espagnol</li>
+        <li>Connaissance complète du catalogue produits</li>
+        <li>Gestion des cas SAV courants (dimensions, compatibilités, retours)</li>
+        <li>Escalade vers humain si nécessaire</li>
+    </ul>
+
+    <h3>Architecture Chatbot</h3>
+    <div class="code">
+Client → Widget Chat → n8n Webhook → RAG Query (Mémoire Produits) → LLM → Réponse
+                                   ↓
+                            Logging PostgreSQL
+    </div>
+
+    <h3>Mémoire Produits</h3>
+    <table>
+        <tr><th>Donnée</th><th>Source</th><th>Format</th></tr>
+        <tr><td>Fiches produits</td><td>API Prestashop</td><td>Embeddings vectoriels</td></tr>
+        <tr><td>Dimensions / Specs</td><td>Extraction site</td><td>Structured JSON</td></tr>
+        <tr><td>FAQ SAV</td><td>Manuel + historique</td><td>Embeddings vectoriels</td></tr>
+        <tr><td>Règles métier</td><td>Configuration</td><td>Prompt system</td></tr>
+    </table>
+
+    <div class="footer">Documentation Technique • DEV-2025-001 • Page 1/3</div>
+</div>
+
+<div class="page">
+    <div class="header">
+        <div><div class="logo">BAPTISTE<span>/</span>FORT</div></div>
+        <div class="doc-type">DOCUMENTATION TECHNIQUE</div>
+    </div>
+
+    <h2><span>03</span> Module 2 : Blog SEO Automatisé</h2>
+
+    <h3>Pipeline de Génération</h3>
+    <div class="code">
+Airtable (Sujets SEO) → n8n Scheduler → LLM Generation → Review Queue → Prestashop Blog
+         ↑                                    ↓
+    SERP API Audit                    Liens internes auto
+    </div>
+
+    <h3>Structure Article Généré</h3>
+    <table>
+        <tr><th>Élément</th><th>Description</th></tr>
+        <tr><td>Titre H1</td><td>Optimisé SEO avec mot-clé principal</td></tr>
+        <tr><td>Structure H2/H3</td><td>Hiérarchie logique, sous-thèmes</td></tr>
+        <tr><td>Contenu</td><td>800-1500 mots, ton de marque</td></tr>
+        <tr><td>Mots-clés</td><td>Intégration naturelle, densité optimale</td></tr>
+        <tr><td>Liens internes</td><td>Vers produits pertinents (auto)</td></tr>
+        <tr><td>Meta description</td><td>Générée automatiquement</td></tr>
+    </table>
+
+    <h3>Base Airtable - Structure</h3>
+    <div class="grid-2">
+        <div class="box">
+            <div class="box-title">Champs principaux</div>
+            <ul>
+                <li>Sujet / Titre provisoire</li>
+                <li>Mot-clé principal</li>
+                <li>Mots-clés secondaires</li>
+                <li>Volume recherche</li>
+                <li>Difficulté SEO</li>
+                <li>Priorité (calculée)</li>
+            </ul>
+        </div>
+        <div class="box">
+            <div class="box-title">Statuts workflow</div>
+            <ul>
+                <li>À traiter</li>
+                <li>En génération</li>
+                <li>En review</li>
+                <li>Validé</li>
+                <li>Publié</li>
+                <li>Archivé</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span>04</span> Module 3 : Gestion Avis</h2>
+
+    <h3>Sources Avis</h3>
+    <table>
+        <tr><th>Plateforme</th><th>Méthode</th><th>Fréquence</th></tr>
+        <tr><td>Prestashop</td><td>API native</td><td>Temps réel (webhook)</td></tr>
+        <tr><td>Google Business</td><td>API Google My Business</td><td>Toutes les 6h</td></tr>
+        <tr><td>Trustpilot</td><td>API Trustpilot</td><td>Toutes les 6h</td></tr>
+    </table>
+
+    <h3>Pipeline Traitement</h3>
+    <div class="code">
+Nouvel Avis → Analyse Sentiment (LLM) → Classification → Génération Réponse → Review → Publication
+                     ↓                        ↓
+               [Positif/Neutre/Négatif]   [Produit/Livraison/SAV/Autre]
+    </div>
+
+    <h3>Dashboard Suivi</h3>
+    <ul>
+        <li>Score global réputation (temps réel)</li>
+        <li>Répartition par sentiment</li>
+        <li>Thèmes récurrents (tag cloud)</li>
+        <li>Évolution temporelle</li>
+        <li>Alertes avis négatifs</li>
+        <li>Temps de réponse moyen</li>
+    </ul>
+
+    <div class="footer">Documentation Technique • DEV-2025-001 • Page 2/3</div>
+</div>
+
+<div class="page">
+    <div class="header">
+        <div><div class="logo">BAPTISTE<span>/</span>FORT</div></div>
+        <div class="doc-type">DOCUMENTATION TECHNIQUE</div>
+    </div>
+
+    <h2><span>05</span> Infrastructure & Déploiement</h2>
+
+    <h3>Serveur n8n</h3>
+    <table>
+        <tr><th>Spécification</th><th>Valeur</th></tr>
+        <tr><td>Type</td><td>VPS Linux (Ubuntu 22.04)</td></tr>
+        <tr><td>RAM</td><td>4 Go minimum</td></tr>
+        <tr><td>CPU</td><td>2 vCPU</td></tr>
+        <tr><td>Stockage</td><td>40 Go SSD</td></tr>
+        <tr><td>Hébergeur recommandé</td><td>Hetzner / OVH / DigitalOcean</td></tr>
+        <tr><td>Coût estimé</td><td>~8 €/mois</td></tr>
+    </table>
+
+    <h3>Workflows n8n Principaux</h3>
+    <table>
+        <tr><th>Workflow</th><th>Trigger</th><th>Actions</th></tr>
+        <tr><td>chatbot_handler</td><td>Webhook (message client)</td><td>RAG → LLM → Réponse</td></tr>
+        <tr><td>product_sync</td><td>Cron (quotidien)</td><td>Prestashop → Mémoire vectorielle</td></tr>
+        <tr><td>article_generator</td><td>Cron (2x/semaine)</td><td>Airtable → LLM → Prestashop</td></tr>
+        <tr><td>review_fetcher</td><td>Cron (6h)</td><td>APIs → Analyse → Dashboard</td></tr>
+        <tr><td>review_responder</td><td>Nouveau avis</td><td>Analyse → Génération → Publication</td></tr>
+    </table>
+
+    <h2><span>06</span> Sécurité & Données</h2>
+
+    <div class="grid-2">
+        <div class="box">
+            <div class="box-title">Protection des données</div>
+            <ul>
+                <li>HTTPS sur tous les endpoints</li>
+                <li>Authentification API (tokens)</li>
+                <li>Données client jamais envoyées au LLM</li>
+                <li>Logs anonymisés</li>
+                <li>Backup quotidien PostgreSQL</li>
+            </ul>
+        </div>
+        <div class="box">
+            <div class="box-title">Propriété</div>
+            <ul>
+                <li>Code workflows : propriété client</li>
+                <li>Données : 100% propriété client</li>
+                <li>Mémoire produits : propriété client</li>
+                <li>Articles générés : propriété client</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span>07</span> Coûts Opérationnels Mensuels</h2>
+
+    <table>
+        <tr><th>Service</th><th>Usage estimé</th><th>Coût</th></tr>
+        <tr><td>VPS n8n</td><td>24/7</td><td>8 €</td></tr>
+        <tr><td>Base vectorielle (Pinecone free tier)</td><td>< 100k vecteurs</td><td>0-4 €</td></tr>
+        <tr><td>Airtable Pro</td><td>1 base</td><td>12-20 €</td></tr>
+        <tr><td>OpenAI API - Chatbot</td><td>~500 conversations/mois</td><td>1-10 €</td></tr>
+        <tr><td>OpenAI API - Articles</td><td>~8 articles/mois</td><td>0,64 €</td></tr>
+        <tr><td>OpenAI API - Avis</td><td>~100 avis/mois</td><td>0,50 €</td></tr>
+        <tr style="background: #f8f8f8; font-weight: 600;"><td>TOTAL ESTIMÉ</td><td></td><td>30-50 €/mois</td></tr>
+    </table>
+
+    <h2><span>08</span> Formation & Autonomie</h2>
+
+    <ul>
+        <li><strong>Guide administration n8n</strong> : activation/désactivation workflows, monitoring</li>
+        <li><strong>Guide Airtable</strong> : ajout sujets, modification priorités, validation articles</li>
+        <li><strong>Guide Dashboard</strong> : lecture métriques, export rapports</li>
+        <li><strong>Procédures maintenance</strong> : redémarrage serveur, mise à jour, backup</li>
+        <li><strong>Session formation</strong> : 2h visio avec l'équipe</li>
+    </ul>
+
+    <div class="footer">Documentation Technique • DEV-2025-001 • Page 3/3 • Baptiste Fort</div>
+</div>
+
+</body>
+</html>

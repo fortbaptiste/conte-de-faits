@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEVIS /// {{MISSION_TITLE}}</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                box-shadow: none;
+            }
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10mm;
+            padding-bottom: 8mm;
+            border-bottom: 4px solid #1a1a1a;
+        }
+
+        .logo-section {}
+
+        .doc-type {
+            display: inline-block;
+            background: #FAFF00;
+            border: 3px solid black;
+            padding: 3px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5mm;
+            transform: rotate(-2deg);
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+
+        .title span {
+            color: #FF3C00;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #888;
+            margin-top: 2mm;
+        }
+
+        .meta {
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
+        .meta-row {
+            margin-bottom: 2mm;
+        }
+
+        .meta-label {
+            color: #888;
+        }
+
+        .meta-value {
+            font-weight: 700;
+            color: #FF3C00;
+        }
+
+        /* Parties */
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8mm;
+            margin-bottom: 10mm;
+        }
+
+        .party {
+            padding: 6mm;
+            border: 3px solid #1a1a1a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+        }
+
+        .party.from {
+            background: #1a1a1a;
+            color: white;
+            box-shadow: 6px 6px 0 0 #1a1a1a;
+        }
+
+        .party.to {
+            box-shadow: 6px 6px 0 0 #1a1a1a;
+        }
+
+        .party-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4mm;
+            padding-bottom: 2mm;
+            border-bottom: 1px solid currentColor;
+            opacity: 0.6;
+        }
+
+        .party-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 3mm;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .party.from .party-name {
+            color: #00FF41;
+        }
+
+        /* Table */
+        .table {
+            border: 3px solid #1a1a1a;
+            margin-bottom: 8mm;
+            box-shadow: 6px 6px 0 0 #1a1a1a;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            background: #1a1a1a;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .table-header div {
+            padding: 4mm 5mm;
+        }
+
+        .table-header div:last-child {
+            text-align: right;
+            border-left: 3px solid #333;
+        }
+
+        .table-body {
+            padding: 6mm;
+        }
+
+        .table-body h4 {
+            font-size: 16px;
+            margin-bottom: 4mm;
+        }
+
+        .table-body ul {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            margin-left: 5mm;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .table-footer {
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            border-top: 3px solid #1a1a1a;
+            background: #f8f8f8;
+        }
+
+        .table-footer div {
+            padding: 5mm;
+            font-weight: 700;
+        }
+
+        .table-footer div:first-child {
+            text-align: right;
+            border-right: 3px solid #1a1a1a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .table-footer div:last-child {
+            text-align: right;
+            font-size: 24px;
+            font-family: 'Space Grotesk', sans-serif;
+            white-space: nowrap;
+        }
+
+        /* Bottom Section */
+        .bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6mm;
+        }
+
+        .notes {
+            padding: 5mm;
+            border: 2px solid #ddd;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            background: #fafafa;
+            line-height: 1.6;
+        }
+
+        .notes strong {
+            display: block;
+            margin-bottom: 3mm;
+        }
+
+        .signature {
+            padding: 5mm;
+            border: 3px dashed #FF3C00;
+            position: relative;
+        }
+
+        .signature-badge {
+            position: absolute;
+            top: -2mm;
+            right: 5mm;
+            background: #FF3C00;
+            color: white;
+            font-size: 8px;
+            padding: 2mm 3mm;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+
+        .signature h4 {
+            font-size: 10px;
+            color: #FF3C00;
+            margin-bottom: 3mm;
+        }
+
+        .signature-box {
+            height: 20mm;
+            border: 1px solid #eee;
+            background: #fafafa;
+            margin-bottom: 4mm;
+        }
+
+        .total-net {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 3mm;
+            border-top: 2px solid #FF3C00;
+        }
+
+        .total-net .label {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .total-net .amount {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 8mm;
+            padding-top: 4mm;
+            border-top: 1px solid #ddd;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="logo-section">
+                <div class="doc-type">DEVIS ESTIMATIF</div>
+                <div class="title">DE<span>VIS</span></div>
+                <div class="subtitle">Document Prévisionnel</div>
+            </div>
+            <div class="meta">
+                <div class="meta-row"><span class="meta-label">N°</span> <span
+                        class="meta-value">{{DEVIS_NUMBER}}</span></div>
+                <div class="meta-row"><span class="meta-label">Date</span> <span class="meta-value">{{DATE}}</span>
+                </div>
+                <div class="meta-row"><span class="meta-label">Validité</span> <span
+                        class="meta-value">{{VALIDITY_DATE}}</span></div>
+            </div>
+        </div>
+
+        <div class="parties">
+            <div class="party from">
+                <div class="party-label">Prestataire</div>
+                <div class="party-name">BAPTISTE FORT</div>
+                <div>Développement & Automatisation</div>
+                <div style="margin-top: 3mm;">1 RUE DU ROI DAGOBERT</div>
+                <div>94130 NOGENT-SUR-MARNE</div>
+                <div style="margin-top: 3mm; opacity: 0.6;">SIRET: 90939247400013</div>
+            </div>
+            <div class="party to">
+                <div class="party-label">Client</div>
+                <div class="party-name">{{CLIENT_NAME}}</div>
+                <div>{{CLIENT_TYPE}}</div>
+                <div style="margin-top: 3mm;">{{CLIENT_ADDRESS}}</div>
+                <div>{{CLIENT_CITY}}</div>
+                <div style="margin-top: 3mm; color: #888;">SIRET: {{CLIENT_SIRET}}</div>
+            </div>
+        </div>
+
+        <div class="table">
+            <div class="table-header">
+                <div>Désignation</div>
+                <div>Montant HT</div>
+            </div>
+            <div class="table-body">
+                <h4>{{MISSION_TITLE}}</h4>
+                <ul>
+                    {{MISSION_ITEMS}}
+                </ul>
+            </div>
+            <div class="table-footer">
+                <div>TOTAL HT</div>
+                <div>{{PRICE}} €</div>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="notes">
+                <strong>Notes :</strong>
+                • Durée estimée : {{DURATION}}<br>
+                • TVA non applicable (art. 293 B du CGI)<br>
+                • Paiement à réception de facture
+            </div>
+            <div class="signature">
+                <div class="signature-badge">BON POUR ACCORD</div>
+                <h4>Signature Client</h4>
+                <div class="signature-box"></div>
+                <div class="total-net">
+                    <span class="label">Net à payer</span>
+                    <span class="amount">{{PRICE}} €</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Baptiste Fort — SIRET 90939247400013 — Document généré le {{DATE}}
+        </div>
+    </div>
+</body>
+
+</html>

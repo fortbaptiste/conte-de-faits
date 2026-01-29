@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITRE_PROJET}} /// BAPTISTE FORT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#1a1a1a',
+                        'brand-white': '#fafafa',
+                        'brand-gray': '#f5f5f5',
+                        'brand-gold': '#C9A962',
+                        'brand-gold-light': '#E8D5A3',
+                        'brand-blue': '#4A6FA5',
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        'hard': '4px 4px 0px 0px #1a1a1a',
+                        'hard-sm': '2px 2px 0px 0px #1a1a1a',
+                        'gold': '4px 4px 0px 0px #C9A962',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { cursor: default; }
+        body { background-color: #fafafa; overflow-x: hidden; }
+        .border-hard { border: 2px solid #1a1a1a; }
+        .marquee-container { overflow: hidden; white-space: nowrap; }
+        .marquee-content { display: inline-block; animation: marquee 40s linear infinite; }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .brut-box {
+            background: white;
+            border: 2px solid #1a1a1a;
+            box-shadow: 4px 4px 0px 0px #1a1a1a;
+            transition: all 0.3s ease;
+        }
+        .brut-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #1a1a1a;
+        }
+        .tag {
+            display: inline-block;
+            background: #1a1a1a;
+            color: white;
+            padding: 4px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-gold { background: #C9A962; color: #1a1a1a; }
+        ul.check-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        ul.check-list li::before {
+            content: '\2192';
+            position: absolute;
+            left: 0;
+            color: #C9A962;
+            font-weight: bold;
+        }
+        .section-header { background: #1a1a1a; color: white; }
+        .gold-accent { color: #C9A962; }
+        .bg-gold-accent { background: #C9A962; }
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+    </style>
+</head>
+
+<body class="text-brand-black selection:bg-brand-gold selection:text-black">
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-50 bg-white border-b-2 border-brand-black flex justify-between items-stretch">
+        <div class="px-6 py-4 bg-brand-black text-white font-display font-bold text-xl tracking-tight flex items-center">
+            BAPTISTE<span class="text-brand-gold">/</span>FORT
+        </div>
+        <div class="hidden md:flex flex-1 items-center overflow-hidden bg-brand-gold border-l-2 border-brand-black border-r-2">
+            <div class="marquee-container w-full font-mono font-medium text-xs text-brand-black">
+                <div class="marquee-content">
+                    &nbsp;&nbsp;&nbsp;{{MARQUEE_TEXT}}&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;{{MARQUEE_TEXT}}&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-4 font-mono font-medium hover:bg-brand-black hover:text-white transition-colors cursor-pointer text-xs flex items-center tracking-wide">
+            {{NUMERO_DEVIS}}
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="pt-28 pb-16 px-4 md:px-8 max-w-6xl mx-auto">
+        <div class="bg-white border-hard p-8 md:p-12 shadow-hard mb-10 relative">
+            <div class="absolute -top-3 -left-3 bg-brand-gold text-brand-black font-mono font-medium px-4 py-2 text-xs tracking-wide">
+                DEVIS {{NUMERO_DEVIS}}
+            </div>
+
+            <h1 class="font-display font-black text-4xl md:text-6xl mb-8 leading-tight">
+                {{TITRE_H1_LIGNE1}}<br>
+                <span class="gold-accent">{{TITRE_H1_LIGNE2}}</span>
+            </h1>
+
+            <div class="space-y-5 text-base font-sans font-normal max-w-3xl text-brand-black/80">
+                <p>{{DESCRIPTION_INTRO}}</p>
+                <p class="font-medium text-brand-black">{{DESCRIPTION_ACCENT}}</p>
+            </div>
+        </div>
+
+        <!-- MONTANT -->
+        <div class="grid md:grid-cols-12 gap-6 items-stretch">
+            <div class="md:col-span-8 bg-brand-black text-white border-hard p-8 md:p-10">
+                <p class="text-brand-gold font-mono text-xs mb-3 tracking-wider">// INVESTISSEMENT</p>
+                <h2 class="font-display font-black text-5xl md:text-6xl mb-4">{{MONTANT_TTC}} <span class="text-2xl text-white/60">TTC</span></h2>
+                <p class="text-white/70 mb-6">{{DESCRIPTION_PAIEMENT}}</p>
+                <div class="bg-white/10 p-4 border border-white/20">
+                    <p class="font-mono text-lg"><span class="text-brand-gold font-bold">{{MENSUALITE}}</span> {{DETAIL_MENSUALITE}}</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 bg-brand-gold border-hard p-8 flex flex-col justify-center">
+                <p class="mb-2 font-mono text-xs text-brand-black/60 tracking-wide">DEMARRAGE</p>
+                <h3 class="font-bold font-mono text-2xl mb-3 border-b-2 border-brand-black pb-2">{{DATE_DEMARRAGE}}</h3>
+                <p class="text-brand-black font-medium text-sm">{{DATE_LIVRAISON}}</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODULES -->
+    <main class="px-4 md:px-8 max-w-6xl mx-auto pb-24 space-y-16">
+
+        {{MODULES_CONTENT}}
+
+        <!-- CONDITIONS -->
+        <section class="brut-box p-0 bg-brand-black text-white">
+            <div class="p-6 md:p-10">
+                <h2 class="font-display font-bold text-2xl md:text-3xl mb-8 border-b border-white/20 pb-4">Conditions</h2>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div>
+                        <h4 class="font-mono text-brand-gold text-sm mb-4">PAIEMENT</h4>
+                        <p class="text-white/80 mb-2">{{CONDITIONS_PAIEMENT}}</p>
+                        <p class="text-white/60 text-sm">{{PERIODE_PAIEMENT}}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-mono text-brand-gold text-sm mb-4">CONFIDENTIALITE</h4>
+                        <p class="text-white/80">Toutes tes donnees restent 100% ta propriete</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-black text-white py-16 px-4 md:px-8 border-t-4 border-brand-gold">
+        <div class="max-w-3xl mx-auto text-center">
+            <div class="mb-10 font-sans text-lg leading-relaxed">
+                <p class="mb-6 text-white/70">{{FOOTER_DESCRIPTION}}</p>
+                <p class="italic text-white/50">Pret a automatiser ?</p>
+            </div>
+
+            <a href="https://wa.me/33626105640?text={{WHATSAPP_MESSAGE}}" target="_blank"
+                class="inline-block font-display font-bold text-2xl md:text-3xl bg-brand-gold text-brand-black px-10 py-5 border-2 border-brand-gold hover:bg-transparent hover:text-brand-gold transition-all">
+                JE VALIDE LE DEVIS
+            </a>
+
+            <div class="mt-12 pt-8 border-t border-white/20 text-white/40 text-sm">
+                <p>{{CLIENT_NOM}} - {{CLIENT_ADRESSE}}</p>
+                <p>SIRET: {{CLIENT_SIRET}}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.brut-box').forEach((box, i) => {
+            gsap.from(box, { scrollTrigger: { trigger: box, start: 'top 85%', toggleActions: 'play none none reverse' }, y: 40, opacity: 0, duration: 0.8, ease: 'power2.out' });
+        });
+    </script>
+
+</body>
+</html>

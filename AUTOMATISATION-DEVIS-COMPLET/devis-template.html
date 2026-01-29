@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devis {{NUMERO_DEVIS}} - {{TITRE_PROJET}}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background: white;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: white;
+            page-break-after: always;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #C9A962;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+
+        .logo span { color: #C9A962; }
+
+        .devis-info {
+            text-align: right;
+        }
+
+        .devis-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: #C9A962;
+            margin-bottom: 5px;
+        }
+
+        .devis-date {
+            color: #666;
+            font-size: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .client-box {
+            background: #f8f8f8;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #C9A962;
+        }
+
+        .client-box h3 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .client-box p {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .section-title span {
+            color: #C9A962;
+            margin-right: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background: #f0f0f0;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .item-desc {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .price {
+            text-align: right;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .total-section {
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .total-row.main {
+            font-size: 20px;
+            font-weight: 700;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .total-row.main .amount {
+            color: #C9A962;
+        }
+
+        .payment-info {
+            background: #C9A962;
+            color: #1a1a1a;
+            padding: 15px 20px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat({{TIMELINE_COLS}}, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: #f8f8f8;
+            border-top: 3px solid #C9A962;
+        }
+
+        .timeline-item .month {
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .timeline-item .content {
+            font-size: 9px;
+            color: #666;
+        }
+
+        .conditions {
+            font-size: 10px;
+            color: #666;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .conditions h4 {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .conditions ul {
+            padding-left: 15px;
+        }
+
+        .conditions li {
+            margin-bottom: 5px;
+        }
+
+        .signature-area {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            width: 45%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            min-height: 100px;
+        }
+
+        .signature-box h4 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 3px solid #C9A962;
+            text-align: center;
+            font-size: 9px;
+            color: #999;
+        }
+
+        .footer strong {
+            color: #1a1a1a;
+        }
+
+        .page-2-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #C9A962;
+        }
+
+        .checklist {
+            columns: 2;
+            column-gap: 30px;
+        }
+
+        .checklist li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            break-inside: avoid;
+        }
+
+        .checklist li::before {
+            content: "\2713";
+            position: absolute;
+            left: 0;
+            color: #C9A962;
+            font-weight: bold;
+        }
+
+        .costs-table td:last-child {
+            text-align: right;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 -->
+    <div class="page">
+        <div class="header">
+            <div>
+                <div class="logo">BAPTISTE<span>/</span>FORT</div>
+                <div style="font-size: 10px; color: #666; margin-top: 5px;">Automatisation & IA</div>
+            </div>
+            <div class="devis-info">
+                <div class="devis-number">{{NUMERO_DEVIS}}</div>
+                <div class="devis-date">Date : {{DATE_DEVIS}}</div>
+                <div class="devis-date">Validite : 30 jours</div>
+            </div>
+        </div>
+
+        <h1 class="title">Devis {{TITRE_PROJET}}</h1>
+        <p class="subtitle">{{SOUS_TITRE}}</p>
+
+        <div class="client-box">
+            <h3>Client</h3>
+            <p><strong>{{CLIENT_NOM}}</strong><br>
+            {{CLIENT_ADRESSE}}<br>
+            SIRET: {{CLIENT_SIRET}}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><span>01</span> Prestations</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60%">Description</th>
+                        <th style="width: 20%">Periode</th>
+                        <th style="width: 20%">Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{PRESTATIONS_ROWS}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-section">
+            <div class="total-row">
+                <span>Total HT</span>
+                <span>{{TOTAL_HT}}</span>
+            </div>
+            <div class="total-row">
+                <span>TVA (20%)</span>
+                <span>{{TVA}}</span>
+            </div>
+            <div class="total-row main">
+                <span>Total TTC</span>
+                <span class="amount">{{TOTAL_TTC}}</span>
+            </div>
+        </div>
+
+        <div class="payment-info">
+            <strong>Modalites de paiement :</strong> {{MODALITES_PAIEMENT}}
+        </div>
+
+        <div class="section" style="margin-top: 30px;">
+            <div class="section-title"><span>02</span> Planning</div>
+            <div class="timeline">
+                {{TIMELINE_ITEMS}}
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Baptiste Fort</strong> - Automatisation & Intelligence Artificielle<br>
+            contact@baptistefort.com - 06 26 10 56 40
+        </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page">
+        <div class="header">
+            <div>
+                <div class="logo">BAPTISTE<span>/</span>FORT</div>
+            </div>
+            <div class="devis-info">
+                <div class="devis-number">{{NUMERO_DEVIS}}</div>
+                <div class="devis-date">Page 2/2</div>
+            </div>
+        </div>
+
+        <h2 class="page-2-title">Detail des prestations incluses</h2>
+
+        <div class="section">
+            <ul class="checklist" style="list-style: none; padding: 0;">
+                {{CHECKLIST_ITEMS}}
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><span>03</span> Couts mensuels apres projet (a votre charge)</div>
+            <table class="costs-table">
+                {{COUTS_MENSUELS_ROWS}}
+                <tr style="background: #f8f8f8; font-weight: 600;">
+                    <td>Total estime mensuel</td>
+                    <td>{{TOTAL_MENSUEL}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="conditions">
+            <h4>Conditions generales</h4>
+            <ul>
+                <li><strong>Paiement :</strong> {{CONDITIONS_PAIEMENT}}</li>
+                <li><strong>Confidentialite :</strong> Toutes vos donnees restent 100% votre propriete</li>
+                <li><strong>Non inclus :</strong> {{NON_INCLUS}}</li>
+                <li><strong>Validite :</strong> Ce devis est valable 30 jours a compter de sa date d'emission</li>
+            </ul>
+        </div>
+
+        <div class="signature-area">
+            <div class="signature-box">
+                <h4>Le prestataire</h4>
+                <p style="font-size: 10px; color: #666;">Baptiste Fort<br>Date :</p>
+            </div>
+            <div class="signature-box">
+                <h4>Le client (bon pour accord)</h4>
+                <p style="font-size: 10px; color: #666;">{{CLIENT_NOM}}<br>Date :<br><br>Signature :</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Baptiste Fort</strong> - Automatisation & Intelligence Artificielle<br>
+            contact@baptistefort.com - 06 26 10 56 40
+        </div>
+    </div>
+
+</body>
+</html>

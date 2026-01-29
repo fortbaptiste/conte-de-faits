@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposition Technique - Conte de Faits | Baptiste Fort</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Baptiste Fort</a>
+            <ul class="nav-menu">
+                <li><a href="#about">Qui suis-je</a></li>
+                <li><a href="#references">Références</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#chiffrage">Chiffrage</a></li>
+                <li><a href="#contact" class="nav-cta">Contact</a></li>
+            </ul>
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge">Proposition Technique & Commerciale</span>
+                <h1>Automatisation du Parcours Client Digital</h1>
+                <p class="hero-subtitle">Une infrastructure robuste, traçable et scalable pour <strong>Conte de Faits</strong></p>
+                <div class="hero-meta">
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 29 janvier 2026</span>
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Baptiste Fort</span>
+                </div>
+                <div class="hero-actions">
+                    <a href="#chiffrage" class="btn btn-primary">Voir le chiffrage</a>
+                    <a href="https://www.linkedin.com/in/baptiste-fort-46873524b/" target="_blank" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        Mon LinkedIn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Présentation</span>
+                <h2>Qui suis-je</h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-content">
+                    <p class="lead">Je m'appelle <strong>Baptiste Fort</strong>, spécialiste en automatisation et intégration de systèmes IA pour les entreprises.</p>
+                    <p>Mon approche est simple : construire des systèmes qui fonctionnent en production, pas des prototypes qui cassent au premier pic de charge. Je conçois des architectures pensées pour durer, avec une obsession pour la <strong>fiabilité</strong>, la <strong>traçabilité</strong> et la <strong>maintenabilité</strong>.</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-value">4+</span>
+                            <span class="stat-label">Projets d'envergure</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">15+</span>
+                            <span class="stat-label">Automatisations déployées</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">100%</span>
+                            <span class="stat-label">Clients satisfaits</span>
+                        </div>
+                    </div>
+                    <a href="https://www.linkedin.com/in/baptiste-fort-46873524b/" target="_blank" class="btn btn-outline">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        Voir mon profil LinkedIn
+                    </a>
+                </div>
+                <div class="about-skills">
+                    <h3>Compétences clés</h3>
+                    <div class="skills-list">
+                        <div class="skill-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            <span>Intégration API (REST, Webhooks, OAuth)</span>
+                        </div>
+                        <div class="skill-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                            <span>Architecture événementielle</span>
+                        </div>
+                        <div class="skill-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                            <span>n8n, Make, Zapier</span>
+                        </div>
+                        <div class="skill-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                            <span>Claude API / OpenAI</span>
+                        </div>
+                        <div class="skill-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                            <span>WordPress avancé (hooks, REST API)</span>
+                        </div>
+                        <div class="skill-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                            <span>PostgreSQL, MySQL, APIs Google</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section id="references" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Portfolio</span>
+                <h2>Références clients</h2>
+                <p>Des projets concrets, des résultats mesurables</p>
+            </div>
+            <div class="references-grid">
+                <!-- Bonaparte -->
+                <div class="reference-card">
+                    <div class="reference-header">
+                        <div class="reference-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        </div>
+                        <h3>Réseau Bonaparte</h3>
+                        <span class="reference-type">Réseau d'agences multi-sites</span>
+                    </div>
+                    <div class="reference-body">
+                        <p>Infrastructure complète d'automatisation couvrant l'ensemble du cycle commercial avec déploiement d'agents IA.</p>
+                        <ul class="reference-list">
+                            <li>Qualification de leads et scoring automatisé par IA</li>
+                            <li>Synchronisation CRM multi-sources avec déduplication</li>
+                            <li>Pipeline de génération de contenus marketing personnalisés</li>
+                            <li>Dashboard monitoring temps réel + alerting</li>
+                            <li>Routing intelligent des demandes vers les agences</li>
+                        </ul>
+                        <div class="reference-tech">
+                            <span>n8n</span>
+                            <span>PostgreSQL</span>
+                            <span>Claude API</span>
+                            <span>Salesforce</span>
+                            <span>Redis</span>
+                        </div>
+                    </div>
+                    <div class="reference-footer">
+                        <div class="reference-result">
+                            <span class="result-value">-65%</span>
+                            <span class="result-label">temps traitement leads</span>
+                        </div>
+                        <div class="reference-result">
+                            <span class="result-value">0</span>
+                            <span class="result-label">perte de données (18 mois)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prévoté -->
+                <div class="reference-card">
+                    <div class="reference-header">
+                        <div class="reference-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        </div>
+                        <h3>Groupe Logistique Prévoté</h3>
+                        <span class="reference-type">SAV & coordination multi-pôles</span>
+                    </div>
+                    <div class="reference-body">
+                        <p>Automatisation complète du SAV avec agent IA de première ligne et coordination entre les pôles internes.</p>
+                        <ul class="reference-list">
+                            <li>Workflow SAV : ticket → diagnostic → résolution → feedback</li>
+                            <li>Agent IA pour qualification et catégorisation</li>
+                            <li>Routing intelligent (transport, entrepôt, facturation)</li>
+                            <li>Relances automatisées avec escalade progressive</li>
+                            <li>Intégration bidirectionnelle TMS</li>
+                        </ul>
+                        <div class="reference-tech">
+                            <span>n8n</span>
+                            <span>Airtable</span>
+                            <span>OpenAI</span>
+                            <span>Twilio</span>
+                        </div>
+                    </div>
+                    <div class="reference-footer">
+                        <div class="reference-result">
+                            <span class="result-value">4h → 45min</span>
+                            <span class="result-label">temps de réponse moyen</span>
+                        </div>
+                        <div class="reference-result">
+                            <span class="result-value">+40%</span>
+                            <span class="result-label">résolution premier contact</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vitreflam -->
+                <div class="reference-card">
+                    <div class="reference-header">
+                        <div class="reference-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        </div>
+                        <h3>Vitreflam</h3>
+                        <span class="reference-type">E-commerce spécialisé</span>
+                    </div>
+                    <div class="reference-body">
+                        <p>Automatisation du workflow commande complet avec intégration multi-transporteurs et gestion des retours.</p>
+                        <ul class="reference-list">
+                            <li>Synchronisation catalogue WooCommerce ↔ ERP</li>
+                            <li>Workflow : confirmation → préparation → expédition</li>
+                            <li>Intégration Chronopost, GLS, messagerie privée</li>
+                            <li>Génération automatique BL, factures, étiquettes</li>
+                            <li>Alertes stock intelligent avec seuils dynamiques</li>
+                        </ul>
+                        <div class="reference-tech">
+                            <span>n8n</span>
+                            <span>WooCommerce</span>
+                            <span>APIs transporteurs</span>
+                            <span>Google Sheets</span>
+                        </div>
+                    </div>
+                    <div class="reference-footer">
+                        <div class="reference-result">
+                            <span class="result-value">85%</span>
+                            <span class="result-label">commandes automatisées</span>
+                        </div>
+                        <div class="reference-result">
+                            <span class="result-value">-90%</span>
+                            <span class="result-label">erreurs d'expédition</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marbera -->
+                <div class="reference-card">
+                    <div class="reference-header">
+                        <div class="reference-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        </div>
+                        <h3>Marbera</h3>
+                        <span class="reference-type">E-commerce multi-canal</span>
+                    </div>
+                    <div class="reference-body">
+                        <p>Pipeline d'intégration marketplaces avec synchronisation stock temps réel et analyse IA des avis clients.</p>
+                        <ul class="reference-list">
+                            <li>Import produits avec enrichissement automatique</li>
+                            <li>Intégration Amazon, Cdiscount + sync stock</li>
+                            <li>Analyse sentiment des avis + réponses suggérées</li>
+                            <li>Réapprovisionnement automatique par vélocité</li>
+                            <li>Reporting consolidé multi-canal</li>
+                        </ul>
+                        <div class="reference-tech">
+                            <span>n8n</span>
+                            <span>APIs marketplaces</span>
+                            <span>WooCommerce</span>
+                            <span>Claude</span>
+                        </div>
+                    </div>
+                    <div class="reference-footer">
+                        <div class="reference-result">
+                            <span class="result-value">÷3</span>
+                            <span class="result-label">ruptures de stock</span>
+                        </div>
+                        <div class="reference-result">
+                            <span class="result-value">-70%</span>
+                            <span class="result-label">temps gestion catalogue</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comprehension Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Analyse</span>
+                <h2>Compréhension du projet</h2>
+            </div>
+            <div class="comprehension-content">
+                <div class="comprehension-intro">
+                    <p class="lead">Après analyse de votre cahier des charges et de votre site <a href="https://contedefaits.com/" target="_blank">contedefaits.com</a>, je comprends que votre activité repose sur un parcours client digital sophistiqué.</p>
+                </div>
+                <div class="comprehension-grid">
+                    <div class="comprehension-card">
+                        <div class="comprehension-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <h3>Le produit</h3>
+                        <p>Livres personnalisés pour enfants, où les photos réelles sont transformées en illustrations 3D via IA, intégrées dans une narration sur mesure.</p>
+                    </div>
+                    <div class="comprehension-card">
+                        <div class="comprehension-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+                        </div>
+                        <h3>Le défi</h3>
+                        <p>Industrialiser ce parcours créatif tout en préservant la qualité et la personnalisation, avec une traçabilité complète de bout en bout.</p>
+                    </div>
+                </div>
+                <div class="enjeux-section">
+                    <h3>Les enjeux identifiés</h3>
+                    <div class="enjeux-grid">
+                        <div class="enjeu-item">
+                            <span class="enjeu-number">01</span>
+                            <div class="enjeu-content">
+                                <h4>Volume croissant</h4>
+                                <p>Le système doit absorber la montée en charge sans dégradation</p>
+                            </div>
+                        </div>
+                        <div class="enjeu-item">
+                            <span class="enjeu-number">02</span>
+                            <div class="enjeu-content">
+                                <h4>Qualité constante</h4>
+                                <p>Chaque livre est unique, les erreurs sont visibles et coûteuses</p>
+                            </div>
+                        </div>
+                        <div class="enjeu-item">
+                            <span class="enjeu-number">03</span>
+                            <div class="enjeu-content">
+                                <h4>Expérience client</h4>
+                                <p>Le client doit être informé, rassuré, impliqué à chaque étape</p>
+                            </div>
+                        </div>
+                        <div class="enjeu-item">
+                            <span class="enjeu-number">04</span>
+                            <div class="enjeu-content">
+                                <h4>Efficacité opérationnelle</h4>
+                                <p>Minimiser les interventions manuelles sur les cas nominaux</p>
+                            </div>
+                        </div>
+                        <div class="enjeu-item">
+                            <span class="enjeu-number">05</span>
+                            <div class="enjeu-content">
+                                <h4>Conformité RGPD</h4>
+                                <p>Photos d'enfants = données sensibles, protection maximale requise</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendation Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Recommandation</span>
+                <h2>Pourquoi n8n auto-hébergé</h2>
+                <p>L'approche technique qui répond à vos contraintes</p>
+            </div>
+            <div class="recommendation-content">
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Critère</th>
+                                <th class="highlight">n8n auto-hébergé</th>
+                                <th>Make.com</th>
+                                <th>Zapier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Coût à l'échelle</td>
+                                <td class="highlight"><span class="check">✓</span> Fixe (serveur)</td>
+                                <td>Variable (exécutions)</td>
+                                <td>Variable (tâches)</td>
+                            </tr>
+                            <tr>
+                                <td>RGPD / Données sensibles</td>
+                                <td class="highlight"><span class="check">✓</span> Données chez vous</td>
+                                <td>Transit serveurs US</td>
+                                <td>Transit serveurs US</td>
+                            </tr>
+                            <tr>
+                                <td>Personnalisation</td>
+                                <td class="highlight"><span class="check">✓</span> Code custom illimité</td>
+                                <td>Limité</td>
+                                <td>Limité</td>
+                            </tr>
+                            <tr>
+                                <td>Debugging</td>
+                                <td class="highlight"><span class="check">✓</span> Logs complets, replay</td>
+                                <td>Basique</td>
+                                <td>Basique</td>
+                            </tr>
+                            <tr>
+                                <td>Vendor lock-in</td>
+                                <td class="highlight"><span class="check">✓</span> Aucun (open source)</td>
+                                <td>Fort</td>
+                                <td>Fort</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="recommendation-cards">
+                    <div class="rec-card rec-card-warning">
+                        <div class="rec-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>L'argument décisif : RGPD et photos d'enfants</h3>
+                        <p>Vous manipulez des <strong>photos d'enfants</strong> et des <strong>données familiales</strong>. Ce sont des données sensibles au sens du RGPD.</p>
+                        <div class="rec-comparison">
+                            <div class="rec-bad">
+                                <h4>Avec Make.com / Zapier</h4>
+                                <ul>
+                                    <li>Données transitent par serveurs américains</li>
+                                    <li>Dépendance à leurs politiques de rétention</li>
+                                    <li>Justification requise en cas de contrôle CNIL</li>
+                                    <li>Risque réputationnel en cas de fuite</li>
+                                </ul>
+                            </div>
+                            <div class="rec-good">
+                                <h4>Avec n8n auto-hébergé</h4>
+                                <ul>
+                                    <li>Données ne quittent jamais votre infrastructure</li>
+                                    <li>Contrôle total rétention et purge</li>
+                                    <li>Conformité RGPD native</li>
+                                    <li>Pas de coût par exécution</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rec-card rec-card-money">
+                        <div class="rec-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <h3>L'argument économique</h3>
+                        <p>Hypothèse : 500 livres/mois, 15 automatisations, ~50 exécutions par livre</p>
+                        <div class="cost-comparison">
+                            <div class="cost-item">
+                                <span class="cost-label">Make.com (Pro)</span>
+                                <span class="cost-value bad">300-500€/mois + dépassements</span>
+                            </div>
+                            <div class="cost-item">
+                                <span class="cost-label">Zapier (Professional)</span>
+                                <span class="cost-value bad">400-800€/mois + dépassements</span>
+                            </div>
+                            <div class="cost-item highlight">
+                                <span class="cost-label">n8n auto-hébergé</span>
+                                <span class="cost-value good">50-80€/mois fixe</span>
+                            </div>
+                        </div>
+                        <div class="savings-highlight">
+                            <span class="savings-value">3 000 à 8 000€</span>
+                            <span class="savings-label">d'économie sur 12 mois + prévisibilité budgétaire</span>
+                        </div>
+                    </div>
+
+                    <div class="rec-card rec-card-ai">
+                        <div class="rec-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        </div>
+                        <h3>Pourquoi Claude API pour la génération</h3>
+                        <p><strong>Anthropic (Claude) n'utilise pas les données des appels API pour entraîner ses modèles.</strong></p>
+                        <p>C'est crucial pour votre cas : les textes générés contiennent des prénoms d'enfants et des histoires familiales. Avec Claude API, vous pouvez garantir à vos clients que leurs données ne servent pas à entraîner une IA.</p>
+                        <ul class="ai-benefits">
+                            <li>Qualité supérieure sur les textes narratifs longs</li>
+                            <li>Respect des contraintes de ton et de style</li>
+                            <li>Génération JSON structurée native</li>
+                            <li>Confidentialité des données garantie</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Technique</span>
+                <h2>Architecture proposée</h2>
+            </div>
+
+            <div class="architecture-diagram">
+                <pre class="diagram-code">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           FRONT OFFICE (Client)                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  WordPress + WPForms          WooCommerce              Espace Client        │
+│  (Collecte données)           (Paiement)               (Avatars/Validation) │
+└──────────┬────────────────────────┬─────────────────────────┬───────────────┘
+           │                        │                         │
+           ▼                        ▼                         ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         COUCHE ÉVÉNEMENTS (Webhooks)                         │
+│  form_submitted │ payment_confirmed │ avatars_validated │ text_generated    │
+└──────────┬────────────────────────┬─────────────────────────┬───────────────┘
+           │                        │                         │
+           ▼                        ▼                         ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      n8n - ORCHESTRATEUR CENTRAL                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                  │
+│   │  Workflow    │    │  Workflow    │    │  Workflow    │                  │
+│   │  Paiement    │    │  Avatars     │    │  Génération  │                  │
+│   └──────┬───────┘    └──────┬───────┘    └──────┬───────┘                  │
+│          │                   │                   │                          │
+│          ▼                   ▼                   ▼                          │
+│   ┌─────────────────────────────────────────────────────────┐               │
+│   │              STATE MACHINE (Machine d'états)             │               │
+│   │  pending → paid → avatars_pending → avatars_validated   │               │
+│   │  → text_generating → images_generating → production     │               │
+│   └─────────────────────────────────────────────────────────┘               │
+│                              │                                              │
+│                              ▼                                              │
+│   ┌─────────────────────────────────────────────────────────┐               │
+│   │           SOURCE DE VÉRITÉ (Table WordPress custom)      │               │
+│   │              Table: cdf_books (par book_id)              │               │
+│   └─────────────────────────────────────────────────────────┘               │
+└──────────────────────────────────┬──────────────────────────────────────────┘
+                                   │
+           ┌───────────────────────┼───────────────────────┐
+           ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Google Drive  │    │   API Claude    │    │   HubSpot CRM   │
+│   (Stockage)    │    │   (Génération)  │    │   (Suivi comm.) │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                </pre>
+            </div>
+
+            <div class="architecture-details">
+                <div class="arch-card">
+                    <h3>Le book_id : clé de voûte</h3>
+                    <p>Chaque commande reçoit un identifiant unique généré à la création :</p>
+                    <code class="code-block">CDF-{YYYYMM}-{sequence}-{checksum}<br>Exemple : CDF-202601-00042-7X</code>
+                    <ul>
+                        <li><strong>Unique</strong> : jamais de collision</li>
+                        <li><strong>Traçable</strong> : présent dans tous les logs, fichiers, emails</li>
+                        <li><strong>Vérifiable</strong> : le checksum détecte les erreurs de saisie</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <h3>Machine d'états</h3>
+                    <div class="state-flow">
+                        <div class="state">pending</div>
+                        <span class="arrow">→</span>
+                        <div class="state">paid</div>
+                        <span class="arrow">→</span>
+                        <div class="state">avatars_pending</div>
+                        <span class="arrow">→</span>
+                        <div class="state">avatars_validated</div>
+                        <span class="arrow">→</span>
+                        <div class="state">text_generating</div>
+                        <span class="arrow">→</span>
+                        <div class="state">images_generating</div>
+                        <span class="arrow">→</span>
+                        <div class="state">production</div>
+                        <span class="arrow">→</span>
+                        <div class="state">shipped</div>
+                        <span class="arrow">→</span>
+                        <div class="state final">delivered</div>
+                    </div>
+                </div>
+
+                <div class="arch-card">
+                    <h3>Idempotence garantie</h3>
+                    <p>Relancer une opération produit le même résultat sans effets de bord :</p>
+                    <ul>
+                        <li>Clé d'idempotence par opération</li>
+                        <li>Vérification d'état avant action</li>
+                        <li>Transactions atomiques</li>
+                        <li>Notifications avec déduplication</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <h3>Observabilité</h3>
+                    <p>Logs structurés par book_id avec monitoring en temps réel :</p>
+                    <ul>
+                        <li>Dashboard de suivi global</li>
+                        <li>Alertes sur erreurs et blocages</li>
+                        <li>Historique complet des événements</li>
+                        <li>Interface de reprise manuelle</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chiffrage Section -->
+    <section id="chiffrage" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Budget</span>
+                <h2>Chiffrage détaillé</h2>
+                <p>Découpage en lots pour un déploiement progressif et maîtrisé</p>
+            </div>
+
+            <div class="lots-grid">
+                <!-- Lot 1 -->
+                <div class="lot-card lot-critical">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 1</span>
+                        <span class="lot-priority critical">Critique</span>
+                    </div>
+                    <h3>Socle technique</h3>
+                    <p>Création du book_id, table source de vérité, machine d'états, système de logs, interface admin WordPress, endpoints REST sécurisés.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">6</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">2 100€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 2 -->
+                <div class="lot-card lot-critical">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 2</span>
+                        <span class="lot-priority critical">Critique</span>
+                    </div>
+                    <h3>Notifications post-paiement</h3>
+                    <p>Webhook WooCommerce, notification immédiate, relances 24h/48h conditionnelles, déduplication, historique consultable.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">4</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">1 400€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 3 -->
+                <div class="lot-card lot-critical">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 3</span>
+                        <span class="lot-priority critical">Critique</span>
+                    </div>
+                    <h3>Espace client avatars</h3>
+                    <p>Page dédiée avec auth, interface génération avatars, sélection variantes, validation globale, versioning, responsive.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">6</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">2 100€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 4 -->
+                <div class="lot-card lot-high">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 4</span>
+                        <span class="lot-priority high">Haute</span>
+                    </div>
+                    <h3>Provisioning Google Drive</h3>
+                    <p>Création automatique arborescence, permissions automatiques, dépôt fichiers avec nommage strict, gestion doublons et quotas.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">3</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">1 050€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 5 -->
+                <div class="lot-card lot-high">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 5</span>
+                        <span class="lot-priority high">Haute</span>
+                    </div>
+                    <h3>Génération texte IA</h3>
+                    <p>Intégration API Claude, prompts versionnés, output JSON validé, garde-fous coût et qualité, retry intelligent.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">5</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">1 750€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 6 -->
+                <div class="lot-card lot-medium">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 6</span>
+                        <span class="lot-priority medium">Moyenne → Haute</span>
+                    </div>
+                    <h3>Génération images IA</h3>
+                    <p>Workflow scène par scène, gestion file d'attente, rapport de génération, contrôle qualité minimal, retry sur échecs.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">5</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">1 750€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 7 -->
+                <div class="lot-card lot-medium">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 7</span>
+                        <span class="lot-priority medium">Moyenne</span>
+                    </div>
+                    <h3>Handoff mise en page</h3>
+                    <p>Assemblage automatique dossier production, mapping pages ↔ assets, checklist complétude, notification équipe.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">3</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">1 050€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lot 8 -->
+                <div class="lot-card lot-medium">
+                    <div class="lot-header">
+                        <span class="lot-number">Lot 8</span>
+                        <span class="lot-priority medium">Moyenne</span>
+                    </div>
+                    <h3>Suivi production & expédition</h3>
+                    <p>Notifications statut, page suivi client, intégration API transporteur, anti-spam.</p>
+                    <div class="lot-meta">
+                        <div class="lot-days">
+                            <span class="value">3</span>
+                            <span class="label">jours</span>
+                        </div>
+                        <div class="lot-cost">
+                            <span class="value">1 050€</span>
+                            <span class="label">HT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total -->
+            <div class="chiffrage-total">
+                <div class="total-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Total jours</span>
+                        <span class="breakdown-value">35 jours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">TJM</span>
+                        <span class="breakdown-value">350€ HT</span>
+                    </div>
+                    <div class="breakdown-item total">
+                        <span class="breakdown-label">Budget total</span>
+                        <span class="breakdown-value">12 250€ HT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phasage -->
+            <div class="phasage">
+                <h3>Proposition de phasage</h3>
+                <div class="phases-grid">
+                    <div class="phase-card">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 1</span>
+                            <span class="phase-name">MVP</span>
+                        </div>
+                        <p>Lots 1, 2, 3 — Socle fonctionnel complet, parcours client jusqu'à validation avatars, notifications actives</p>
+                        <div class="phase-meta">
+                            <span>16 jours</span>
+                            <span class="phase-cost">5 600€ HT</span>
+                        </div>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 2</span>
+                            <span class="phase-name">Production</span>
+                        </div>
+                        <p>Lots 4, 5, 6 — Pipeline de génération IA complet, stockage structuré opérationnel</p>
+                        <div class="phase-meta">
+                            <span>13 jours</span>
+                            <span class="phase-cost">4 550€ HT</span>
+                        </div>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 3</span>
+                            <span class="phase-name">Industrialisation</span>
+                        </div>
+                        <p>Lots 7, 8 — Handoff production automatisé, suivi client complet</p>
+                        <div class="phase-meta">
+                            <span>6 jours</span>
+                            <span class="phase-cost">2 100€ HT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gains Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">ROI</span>
+                <h2>Gains attendus</h2>
+            </div>
+
+            <div class="gains-grid">
+                <div class="gains-card">
+                    <h3>Gains de temps</h3>
+                    <table class="gains-table">
+                        <thead>
+                            <tr>
+                                <th>Processus</th>
+                                <th>Avant</th>
+                                <th>Après</th>
+                                <th>Gain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Création dossier Drive</td>
+                                <td>10 min/livre</td>
+                                <td>0 min (auto)</td>
+                                <td class="gain-value">100%</td>
+                            </tr>
+                            <tr>
+                                <td>Notifications manuelles</td>
+                                <td>5 min/livre</td>
+                                <td>0 min (auto)</td>
+                                <td class="gain-value">100%</td>
+                            </tr>
+                            <tr>
+                                <td>Suivi relances</td>
+                                <td>15 min/jour</td>
+                                <td>2 min (vérif)</td>
+                                <td class="gain-value">87%</td>
+                            </tr>
+                            <tr>
+                                <td>Vérification état commande</td>
+                                <td>3 min/demande</td>
+                                <td>30 sec (dashboard)</td>
+                                <td class="gain-value">83%</td>
+                            </tr>
+                            <tr>
+                                <td>Transmission production</td>
+                                <td>20 min/livre</td>
+                                <td>2 min (validation)</td>
+                                <td class="gain-value">90%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="gains-summary">Sur 100 livres/mois : <strong>~40 heures de travail manuel économisées</strong></p>
+                </div>
+
+                <div class="gains-card">
+                    <h3>Gains économiques</h3>
+                    <div class="economic-gains">
+                        <div class="eco-item">
+                            <span class="eco-label">Temps équipe récupéré</span>
+                            <span class="eco-value">Variable selon coûts</span>
+                        </div>
+                        <div class="eco-item">
+                            <span class="eco-label">Erreurs évitées (reprises, réclamations)</span>
+                            <span class="eco-value">~200-500€/mois</span>
+                        </div>
+                        <div class="eco-item">
+                            <span class="eco-label">Coûts fixes n8n vs variable SaaS</span>
+                            <span class="eco-value">~300-600€/mois</span>
+                        </div>
+                        <div class="eco-item total">
+                            <span class="eco-label">Économies mensuelles estimées</span>
+                            <span class="eco-value">500-1 500€</span>
+                        </div>
+                    </div>
+                    <div class="roi-box">
+                        <span class="roi-label">ROI estimé</span>
+                        <span class="roi-value">8-12 mois</span>
+                    </div>
+                </div>
+
+                <div class="gains-card gains-qualitative">
+                    <h3>Gains qualitatifs</h3>
+                    <div class="qual-items">
+                        <div class="qual-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <div>
+                                <h4>Expérience client</h4>
+                                <p>Notifications temps réel, espace client fluide</p>
+                            </div>
+                        </div>
+                        <div class="qual-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <div>
+                                <h4>Traçabilité</h4>
+                                <p>Historique complet de chaque livre, audit possible</p>
+                            </div>
+                        </div>
+                        <div class="qual-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <div>
+                                <h4>Scalabilité</h4>
+                                <p>Le système supporte x10 volume sans modification</p>
+                            </div>
+                        </div>
+                        <div class="qual-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <div>
+                                <h4>Sérénité</h4>
+                                <p>Moins de tâches manuelles = moins d'erreurs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Questions Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Prérequis</span>
+                <h2>Questions bloquantes</h2>
+                <p>Éléments à clarifier avant démarrage</p>
+            </div>
+
+            <div class="questions-grid">
+                <div class="question-card">
+                    <h3>Accès nécessaires</h3>
+                    <ul class="access-list">
+                        <li class="critical">
+                            <span class="access-name">Admin WordPress</span>
+                            <span class="access-badge">Critique</span>
+                        </li>
+                        <li class="critical">
+                            <span class="access-name">Accès serveur (SSH ou panel)</span>
+                            <span class="access-badge">Critique</span>
+                        </li>
+                        <li class="critical">
+                            <span class="access-name">Admin WooCommerce</span>
+                            <span class="access-badge">Critique</span>
+                        </li>
+                        <li class="high">
+                            <span class="access-name">Compte Google Cloud</span>
+                            <span class="access-badge">Haute</span>
+                        </li>
+                        <li class="high">
+                            <span class="access-name">API Anthropic (Claude)</span>
+                            <span class="access-badge">Haute</span>
+                        </li>
+                        <li class="medium">
+                            <span class="access-name">Admin HubSpot</span>
+                            <span class="access-badge">Moyenne</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="question-card">
+                    <h3>Questions techniques</h3>
+                    <ol class="questions-list">
+                        <li>Hébergement WordPress actuel ? (mutualisé, VPS, dédié, cloud ?)</li>
+                        <li>Possibilité d'installer n8n sur le même serveur ou adjacent ?</li>
+                        <li>Version PHP et MySQL actuelles ?</li>
+                        <li>Comment sont générés les avatars actuellement ? API existante ?</li>
+                        <li>Quel outil de mise en page ? Format de fichier attendu ?</li>
+                        <li>Quel(s) transporteur(s) ? API disponible ?</li>
+                    </ol>
+                </div>
+
+                <div class="question-card">
+                    <h3>Questions business</h3>
+                    <ol class="questions-list">
+                        <li>Volume mensuel actuel et projeté ?</li>
+                        <li>Pics d'activité saisonniers à anticiper ?</li>
+                        <li>Budget API IA mensuel envisagé ?</li>
+                        <li>Date cible pour le MVP ?</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section section-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Prochaines étapes</h2>
+                <div class="next-steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <p>Call de cadrage (30-45 min) pour répondre aux questions bloquantes</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <p>Validation du périmètre Phase 1</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <p>Démarrage sous 1 semaine après validation</p>
+                    </div>
+                </div>
+                <div class="cta-actions">
+                    <a href="https://www.linkedin.com/in/baptiste-fort-46873524b/" target="_blank" class="btn btn-primary btn-large">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        Me contacter sur LinkedIn
+                    </a>
+                </div>
+                <div class="signature">
+                    <p><strong>Baptiste Fort</strong></p>
+                    <p>Spécialiste Automatisation & Intégration IA</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Proposition Technique — Conte de Faits — Janvier 2026</p>
+            <p>Baptiste Fort • Automatisation & Intégration IA</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
