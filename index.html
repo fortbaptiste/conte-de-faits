@@ -137,21 +137,17 @@
             </div>
         </div>
 
-        <!-- MONTANT -->
-        <div class="grid md:grid-cols-12 gap-6 items-stretch">
-            <div class="md:col-span-8 bg-brand-black text-white border-hard p-8 md:p-10">
-                <p class="text-brand-gold font-mono text-xs mb-3 tracking-wider">// INVESTISSEMENT TOTAL</p>
-                <h2 class="font-display font-black text-5xl md:text-6xl mb-4">12 250€ <span class="text-2xl text-white/60">HT</span></h2>
-                <p class="text-white/70 mb-6">35 jours de developpement - TJM 350€ HT</p>
-                <div class="bg-white/10 p-4 border border-white/20">
-                    <p class="font-mono text-lg"><span class="text-brand-gold font-bold">Phasage possible</span> en 3 etapes pour lisser l'investissement</p>
-                </div>
-            </div>
-
-            <div class="md:col-span-4 bg-brand-gold border-hard p-8 flex flex-col justify-center">
+        <!-- INFO -->
+        <div class="grid md:grid-cols-2 gap-6 items-stretch">
+            <div class="bg-brand-gold border-hard p-8 flex flex-col justify-center">
                 <p class="mb-2 font-mono text-xs text-brand-black/60 tracking-wide">DATE</p>
                 <h3 class="font-bold font-mono text-2xl mb-3 border-b-2 border-brand-black pb-2">29 JANVIER 2026</h3>
                 <p class="text-brand-black font-medium text-sm">Demarrage sous 1 semaine apres validation</p>
+            </div>
+            <div class="bg-brand-black text-white border-hard p-8 flex flex-col justify-center">
+                <p class="text-brand-gold font-mono text-xs mb-3 tracking-wider">// POUR</p>
+                <h3 class="font-display font-bold text-2xl mb-3">Conte de Faits</h3>
+                <p class="text-white/70 text-sm">Livres personnalises pour enfants avec transformation photo → illustration 3D via IA</p>
             </div>
         </div>
     </header>
@@ -168,10 +164,23 @@
             <div class="p-6 md:p-10">
                 <div class="grid md:grid-cols-2 gap-10">
                     <div>
-                        <p class="text-lg mb-6">Je m'appelle <strong>Baptiste Fort</strong>, je concois des systemes d'automatisation et d'integration pour les entreprises.</p>
+                        <div class="flex items-center gap-4 mb-6">
+                            <a href="https://www.linkedin.com/in/baptiste-fort-46873524b/" target="_blank" class="flex-shrink-0">
+                                <svg class="w-12 h-12 text-[#0A66C2] hover:opacity-80 transition-opacity" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                            <div>
+                                <p class="text-lg font-bold">Baptiste Fort</p>
+                                <p class="text-sm text-brand-black/60">Automatisation & Integration</p>
+                            </div>
+                        </div>
                         <p class="text-brand-black/70 mb-6">Mon approche est simple : construire des systemes qui fonctionnent en production, pas des prototypes qui cassent au premier pic de charge. Je concois des architectures pensees pour durer, avec une obsession pour la <strong>fiabilite</strong>, la <strong>tracabilite</strong> et la <strong>maintenabilite</strong>.</p>
-                        <a href="https://www.linkedin.com/in/baptiste-fort-46873524b/" target="_blank" class="inline-block bg-brand-black text-white font-mono text-sm px-6 py-3 hover:bg-brand-gold hover:text-brand-black transition-colors">
-                            VOIR MON LINKEDIN →
+                        <a href="https://www.linkedin.com/in/baptiste-fort-46873524b/" target="_blank" class="inline-flex items-center gap-2 bg-[#0A66C2] text-white font-mono text-sm px-6 py-3 hover:bg-[#004182] transition-colors">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                            VOIR MON PROFIL
                         </a>
                     </div>
                     <div class="bg-brand-gray p-6 border-hard">
@@ -1013,6 +1022,38 @@
 
                 </div>
 
+            </div>
+        </section>
+
+        <!-- INVESTISSEMENT -->
+        <section class="brut-box p-0">
+            <div class="section-header p-4 md:p-6 flex justify-between items-center">
+                <h2 class="font-display font-bold text-xl md:text-2xl">Investissement</h2>
+                <span class="tag tag-gold">BUDGET</span>
+            </div>
+            <div class="p-6 md:p-10">
+                <div class="bg-brand-black text-white p-8 md:p-12 border-hard text-center">
+                    <p class="text-brand-gold font-mono text-xs mb-4 tracking-wider">// INVESTISSEMENT TOTAL</p>
+                    <h2 class="font-display font-black text-6xl md:text-8xl mb-4">12 250€ <span class="text-3xl text-white/60">HT</span></h2>
+                    <p class="text-white/70 text-lg mb-8">35 jours de developpement - TJM 350€ HT</p>
+                    <div class="bg-brand-gold text-brand-black p-6 max-w-xl mx-auto">
+                        <p class="font-display font-bold text-xl"><span class="font-black">Phasage possible</span> en 3 etapes pour lisser l'investissement</p>
+                        <div class="grid grid-cols-3 gap-4 mt-4 text-sm">
+                            <div>
+                                <p class="font-mono font-bold">Phase 1</p>
+                                <p>5 600€</p>
+                            </div>
+                            <div>
+                                <p class="font-mono font-bold">Phase 2</p>
+                                <p>4 550€</p>
+                            </div>
+                            <div>
+                                <p class="font-mono font-bold">Phase 3</p>
+                                <p>2 100€</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
