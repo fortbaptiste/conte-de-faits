@@ -3,1019 +3,1036 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposition — Conte de Faits × Baptiste Fort</title>
+    <title>Proposition Technique — Conte de Faits × Baptiste Fort</title>
+    <meta name="description" content="Automatisation du parcours avatar client pour Conte de Faits. Proposition technique detaillee par Baptiste Fort.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'bk': '#1a1a1a',
-                        'wh': '#fafaf8',
-                        'gold': '#C9A962',
-                        'gold-l': '#E8D5A3',
-                        'blu': '#4A6FA5',
-                        'red': '#e53935',
-                        'grn': '#43a047',
-                        'gry': '#f0f0ec',
+                        'ink': '#0a0a0a',
+                        'paper': '#f5f0eb',
+                        'cream': '#faf7f2',
+                        'warm': '#e8e0d4',
+                        'amber': '#d4a843',
+                        'amber-l': '#e8c96a',
+                        'amber-d': '#b8922e',
+                        'coral': '#ff6b4a',
+                        'mint': '#34d399',
+                        'sky': '#60a5fa',
+                        'slate': '#64748b',
                     },
                     fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        display: ['Syne', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
                     },
-                    boxShadow: {
-                        'h': '5px 5px 0px 0px #1a1a1a',
-                        'h-sm': '3px 3px 0px 0px #1a1a1a',
-                        'h-gold': '5px 5px 0px 0px #C9A962',
-                        'h-lg': '8px 8px 0px 0px #1a1a1a',
-                    }
                 }
             }
         }
     </script>
+
     <style>
-        * { cursor: default; }
-        a, button { cursor: pointer; }
-        ::selection { background: #C9A962; color: #1a1a1a; }
-        body { background: #fafaf8; overflow-x: hidden; }
-        html.lenis { height: auto; }
-
-        .brd { border: 2.5px solid #1a1a1a; }
-        .brd-b { border-bottom: 2.5px solid #1a1a1a; }
-        .brd-t { border-top: 2.5px solid #1a1a1a; }
-        .brd-gold { border: 2.5px solid #C9A962; }
-
-        .brut {
-            background: white; border: 2.5px solid #1a1a1a;
-            box-shadow: 5px 5px 0px 0px #1a1a1a;
-            transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s cubic-bezier(.4,0,.2,1);
-        }
-        .brut:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 8px 8px 0px 0px #1a1a1a;
-        }
-        .brut-gold {
-            background: white; border: 2.5px solid #C9A962;
-            box-shadow: 5px 5px 0px 0px #C9A962;
-            transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s cubic-bezier(.4,0,.2,1);
-        }
-        .brut-gold:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 8px 8px 0px 0px #C9A962;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: #d4a843; color: #0a0a0a; }
+        html { scroll-behavior: auto; }
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        body {
+            background: #f5f0eb;
+            color: #0a0a0a;
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .tag {
-            display: inline-block; padding: 4px 14px;
-            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
-            font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+        .cursor-dot {
+            width: 8px; height: 8px; background: #d4a843;
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9999;
+            transition: transform 0.15s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-ring {
+            width: 40px; height: 40px;
+            border: 1.5px solid #d4a843;
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9998;
+            transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-ring.hovering {
+            width: 64px; height: 64px;
+            border-color: #ff6b4a;
+            background: rgba(255,107,74,0.05);
         }
 
-        .marquee-wrap { overflow: hidden; white-space: nowrap; }
-        .marquee-inner {
-            display: inline-block;
-            animation: marquee 50s linear infinite;
+        .grain {
+            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 9990; opacity: 0.5;
         }
-        @keyframes marquee {
+
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: linear-gradient(90deg, #d4a843, #ff6b4a);
+            z-index: 10000; transition: width 0.1s linear;
+        }
+
+        .neo {
+            border: 2px solid #0a0a0a;
+            box-shadow: 6px 6px 0 #0a0a0a;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .neo:hover {
+            box-shadow: 10px 10px 0 #0a0a0a;
+            transform: translate(-2px, -2px);
+        }
+        .neo:active {
+            box-shadow: 2px 2px 0 #0a0a0a;
+            transform: translate(2px, 2px);
+        }
+        .neo-sm {
+            border: 2px solid #0a0a0a;
+            box-shadow: 3px 3px 0 #0a0a0a;
+        }
+        .neo-amber {
+            border: 2px solid #d4a843;
+            box-shadow: 6px 6px 0 #d4a843;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .neo-amber:hover {
+            box-shadow: 10px 10px 0 #d4a843;
+            transform: translate(-2px, -2px);
+        }
+
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 14px; border: 1.5px solid #0a0a0a;
+            font-family: 'Space Mono', monospace; font-size: 0.65rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+        }
+        .pill:hover { background: #0a0a0a; color: #f5f0eb; }
+
+        .mag-btn {
+            position: relative; display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 32px; background: #0a0a0a; color: #f5f0eb;
+            border: 2px solid #0a0a0a; font-weight: 600; font-size: 0.9rem;
+            box-shadow: 6px 6px 0 #d4a843;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none; cursor: pointer;
+        }
+        .mag-btn:hover {
+            box-shadow: 10px 10px 0 #d4a843;
+            transform: translate(-2px, -2px);
+        }
+        .mag-btn:active {
+            box-shadow: 2px 2px 0 #d4a843;
+            transform: translate(2px, 2px);
+        }
+
+        .wa-float {
+            position: fixed; bottom: 28px; right: 28px; z-index: 9000;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: #25D366; border: 2px solid #0a0a0a;
+            box-shadow: 4px 4px 0 #0a0a0a;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; cursor: pointer;
+            text-decoration: none;
+        }
+        .wa-float:hover {
+            transform: scale(1.1) translate(-2px,-2px);
+            box-shadow: 6px 6px 0 #0a0a0a;
+        }
+        .wa-float svg { width: 28px; height: 28px; fill: white; }
+
+        .s-reveal { opacity: 0; transform: translateY(60px); }
+
+        .split-line { overflow: hidden; display: block; }
+        .split-line-inner { display: block; transform: translateY(110%); }
+
+        .marquee { overflow: hidden; white-space: nowrap; }
+        .marquee-track {
+            display: inline-flex; gap: 4rem;
+            animation: scroll-left 60s linear infinite;
+        }
+        @keyframes scroll-left {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        .float-y { animation: floatY 3s ease-in-out infinite; }
-        @keyframes floatY {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .counter { font-variant-numeric: tabular-nums; }
+
+        .tl-line {
+            position: absolute; left: 19px; top: 0; bottom: 0; width: 2px;
+            background: linear-gradient(to bottom, #d4a843, #ff6b4a, #d4a843);
+        }
+        .tl-dot {
+            position: absolute; left: 12px; top: 6px;
+            width: 16px; height: 16px; border-radius: 50%;
+            border: 2px solid #0a0a0a; background: #d4a843;
+            z-index: 2;
         }
 
-        .pulse-border {
-            animation: pulseBrd 2s ease-in-out infinite;
+        .mail-mock {
+            background: white; border: 2px solid #0a0a0a;
+            overflow: hidden; box-shadow: 8px 8px 0 rgba(0,0,0,0.08);
         }
-        @keyframes pulseBrd {
-            0%,100% { box-shadow: 5px 5px 0px 0px #C9A962; }
-            50% { box-shadow: 5px 5px 0px 0px #E8D5A3, 0 0 20px rgba(201,169,98,0.15); }
+        .mail-mock-bar {
+            background: #0a0a0a; padding: 10px 16px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .mail-mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        .sticker {
+            display: inline-block; padding: 6px 16px;
+            background: #d4a843; color: #0a0a0a;
+            border: 2px solid #0a0a0a; font-family: 'Space Mono', monospace;
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; transform: rotate(-2deg);
+            box-shadow: 3px 3px 0 #0a0a0a;
         }
 
-        .reveal { opacity: 0; transform: translateY(40px); }
-
-        .number-badge {
-            width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
-            background: #1a1a1a; color: #C9A962; font-family: 'Syne', sans-serif;
-            font-weight: 800; font-size: 1.1rem; border-radius: 0;
-            flex-shrink: 0;
+        .blob {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle, #d4a843 0%, transparent 70%);
+            opacity: 0.08; filter: blur(60px); pointer-events: none;
         }
 
-        .wa-btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: #25D366; color: white; border: 2.5px solid #1a1a1a;
-            box-shadow: 5px 5px 0px 0px #1a1a1a; padding: 14px 28px;
-            font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem;
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
-            text-decoration: none;
+        .divider {
+            height: 2px; background: #0a0a0a; position: relative;
         }
-        .wa-btn:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 8px 8px 0px 0px #1a1a1a;
+        .divider::after {
+            content: ''; position: absolute; top: -4px; left: 50%;
+            transform: translateX(-50%);
+            width: 10px; height: 10px; background: #d4a843;
+            border: 2px solid #0a0a0a; border-radius: 50%;
         }
-        .wa-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px 0px #1a1a1a;
-        }
-
-        .wa-svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
-
-        .timeline-line {
-            position: absolute; left: 23px; top: 48px; bottom: 0; width: 2.5px; background: #C9A962;
-        }
-
-        .mail-card {
-            background: white; border: 2.5px solid #1a1a1a; padding: 2rem;
-            box-shadow: 5px 5px 0px 0px #1a1a1a; position: relative;
-            transition: all 0.3s ease;
-        }
-        .mail-card:hover { transform: translateY(-4px); }
-
-        .state-pill {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 16px; font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem; font-weight: 600; border: 2px solid #1a1a1a;
-        }
-        .state-dot { width: 8px; height: 8px; border-radius: 50%; }
-
-        .confetti-piece {
-            position: fixed; width: 10px; height: 10px; z-index: 9999; pointer-events: none;
-        }
-
-        .toc-link {
-            display: block; padding: 6px 0; font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem; color: #1a1a1a; opacity: 0.6;
-            transition: all 0.2s ease; text-decoration: none;
-        }
-        .toc-link:hover { opacity: 1; padding-left: 8px; color: #C9A962; }
 
         @media (max-width: 768px) {
-            .number-badge { width: 36px; height: 36px; font-size: 0.85rem; }
-            .timeline-line { left: 17px; }
+            .cursor-dot, .cursor-ring { display: none; }
+            .neo { box-shadow: 4px 4px 0 #0a0a0a; }
+            .neo:hover { box-shadow: 4px 4px 0 #0a0a0a; transform: none; }
+            .mag-btn { box-shadow: 4px 4px 0 #d4a843; padding: 14px 24px; }
         }
 
-        .easter-glow {
-            animation: easterGlow 0.6s ease-out;
-        }
-        @keyframes easterGlow {
-            0% { box-shadow: 0 0 0 0 rgba(201,169,98,0.6); }
-            100% { box-shadow: 0 0 40px 20px rgba(201,169,98,0); }
+        @keyframes scrollDown {
+            0% { top: -50%; } 100% { top: 100%; }
         }
     </style>
 </head>
-<body class="text-bk">
 
-<!-- ============ NAV ============ -->
-<nav id="nav" class="fixed top-0 w-full z-50 bg-white brd-b flex justify-between items-stretch">
-    <div id="logo-click" class="px-5 py-3.5 bg-bk text-white font-display font-bold text-lg tracking-tight flex items-center gap-1 select-none">
-        BAPTISTE<span class="text-gold">/</span>FORT
-    </div>
-    <div class="hidden md:flex flex-1 items-center overflow-hidden bg-gold border-l-[2.5px] border-r-[2.5px] border-bk">
-        <div class="marquee-wrap w-full font-mono font-semibold text-[0.65rem] text-bk">
-            <div class="marquee-inner">
-                &nbsp;&nbsp;PROPOSITION TECHNIQUE&nbsp;&nbsp;///&nbsp;&nbsp;CONTE DE FAITS&nbsp;&nbsp;///&nbsp;&nbsp;AUTOMATISATION&nbsp;&nbsp;///&nbsp;&nbsp;N8N&nbsp;&nbsp;///&nbsp;&nbsp;CLAUDE API&nbsp;&nbsp;///&nbsp;&nbsp;WORDPRESS&nbsp;&nbsp;///&nbsp;&nbsp;WOOCOMMERCE&nbsp;&nbsp;///&nbsp;&nbsp;HUBSPOT&nbsp;&nbsp;///&nbsp;&nbsp;GOOGLE DRIVE&nbsp;&nbsp;///&nbsp;&nbsp;PROPOSITION TECHNIQUE&nbsp;&nbsp;///&nbsp;&nbsp;CONTE DE FAITS&nbsp;&nbsp;///&nbsp;&nbsp;AUTOMATISATION&nbsp;&nbsp;///&nbsp;&nbsp;N8N&nbsp;&nbsp;///&nbsp;&nbsp;CLAUDE API&nbsp;&nbsp;///&nbsp;&nbsp;WORDPRESS&nbsp;&nbsp;///&nbsp;&nbsp;WOOCOMMERCE&nbsp;&nbsp;///&nbsp;&nbsp;HUBSPOT&nbsp;&nbsp;///&nbsp;&nbsp;GOOGLE DRIVE&nbsp;&nbsp;///&nbsp;&nbsp;
+<body>
+
+<div class="grain"></div>
+<div id="progress-bar"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<a href="https://wa.me/33626105640" target="_blank" class="wa-float" id="wa-float" title="Discuter sur WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+
+<!-- NAV -->
+<nav class="fixed top-0 w-full z-[100]" id="nav">
+    <div class="bg-paper/90 backdrop-blur-md border-b-2 border-ink">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between h-14">
+            <a href="#top" class="font-mono text-sm font-bold tracking-tight hover:text-amber transition-colors" id="nav-logo">BF<span class="text-amber">_</span></a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#situation" class="font-mono text-[0.65rem] tracking-wider uppercase text-ink/50 hover:text-ink transition-colors">Situation</a>
+                <a href="#solution" class="font-mono text-[0.65rem] tracking-wider uppercase text-ink/50 hover:text-ink transition-colors">Solution</a>
+                <a href="#technique" class="font-mono text-[0.65rem] tracking-wider uppercase text-ink/50 hover:text-ink transition-colors">Technique</a>
+                <a href="#exemple" class="font-mono text-[0.65rem] tracking-wider uppercase text-ink/50 hover:text-ink transition-colors">Exemples</a>
+                <a href="#impact" class="font-mono text-[0.65rem] tracking-wider uppercase text-ink/50 hover:text-ink transition-colors">Impact</a>
+                <a href="#budget" class="font-mono text-[0.65rem] tracking-wider uppercase text-ink/50 hover:text-ink transition-colors">Budget</a>
             </div>
+            <a href="https://wa.me/33626105640" target="_blank" class="flex items-center gap-2 bg-ink text-paper px-4 py-2 text-xs font-mono font-bold tracking-wider hover:bg-amber hover:text-ink transition-all cursor-pointer">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                CONTACT
+            </a>
         </div>
-    </div>
-    <div class="flex items-stretch">
-        <a href="#sommaire" class="px-5 py-3.5 font-mono font-semibold text-[0.65rem] tracking-wider hover:bg-bk hover:text-white transition-colors flex items-center border-r-[2.5px] border-bk">SOMMAIRE</a>
-        <a href="https://wa.me/33626105640" target="_blank" class="px-5 py-3.5 bg-[#25D366] hover:bg-[#1da851] transition-colors flex items-center gap-2 font-mono font-semibold text-[0.65rem] text-white tracking-wider">
-            <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            CONTACT
-        </a>
     </div>
 </nav>
 
-<!-- ============ SECTION 1 — HERO ============ -->
-<header id="s1" class="pt-24 md:pt-28">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="brut p-8 md:p-14 relative">
-            <div class="absolute -top-4 -left-1 md:-left-3">
-                <span class="tag bg-gold text-bk">Proposition Technique</span>
+
+<!-- HERO -->
+<section id="top" class="min-h-screen flex flex-col justify-center relative pt-14">
+    <div class="blob w-[600px] h-[600px] top-[-100px] right-[-200px]"></div>
+    <div class="blob w-[400px] h-[400px] bottom-[-100px] left-[-150px]"></div>
+
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-0 w-full">
+        <div class="grid lg:grid-cols-12 gap-10 items-center">
+            <div class="lg:col-span-7">
+                <div class="mb-6">
+                    <span class="sticker">Proposition Technique — Fev. 2026</span>
+                </div>
+
+                <h1 class="font-serif font-black text-[clamp(2.5rem,6vw,5.5rem)] leading-[0.95] mb-8">
+                    <span class="split-line"><span class="split-line-inner">Automatisation</span></span>
+                    <span class="split-line"><span class="split-line-inner">du <span class="text-amber">Parcours</span></span></span>
+                    <span class="split-line"><span class="split-line-inner"><span class="text-amber">Avatar</span> Client</span></span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-ink/60 max-w-xl leading-relaxed mb-10 s-reveal font-light">
+                    Salut John, deja merci encore pour le call de l'autre jour, c'etait super clair de ton cote et ca m'a permis de bien comprendre comment vous fonctionnez au quotidien avec Mickael.
+                </p>
+
+                <p class="text-base md:text-lg text-ink/50 max-w-xl leading-relaxed mb-12 s-reveal font-light">
+                    J'ai pris le temps de tout poser a plat pour te faire un recap vraiment detaille de ce que je vais mettre en place pour vous. L'idee c'est que tu puisses lire ce document et comprendre exactement ce qui va se passer, comment ca va marcher, et surtout ce que ca va changer dans votre quotidien. Prends un cafe, installe-toi, je t'explique tout.
+                </p>
+
+                <div class="flex flex-wrap gap-3 s-reveal">
+                    <span class="pill">n8n</span>
+                    <span class="pill">Claude API</span>
+                    <span class="pill">WordPress</span>
+                    <span class="pill">WooCommerce</span>
+                    <span class="pill">HubSpot</span>
+                    <span class="pill">Google Drive</span>
+                </div>
             </div>
-            <div class="absolute -top-4 right-4 md:-right-3">
-                <span class="tag bg-bk text-gold">Fevrier 2026</span>
+
+            <div class="lg:col-span-5 s-reveal">
+                <div class="neo bg-white p-8 md:p-10 relative">
+                    <div class="absolute -top-4 -right-4 sticker" style="transform:rotate(3deg)">Pour John</div>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between border-b-2 border-ink/10 pb-4">
+                            <span class="font-mono text-xs text-ink/40 uppercase tracking-widest">Client</span>
+                            <span class="font-semibold">Conte de Faits</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b-2 border-ink/10 pb-4">
+                            <span class="font-mono text-xs text-ink/40 uppercase tracking-widest">Prestataire</span>
+                            <span class="font-semibold">Baptiste Fort</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b-2 border-ink/10 pb-4">
+                            <span class="font-mono text-xs text-ink/40 uppercase tracking-widest">Budget</span>
+                            <span class="font-serif font-bold text-2xl text-amber">4 500&euro;</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b-2 border-ink/10 pb-4">
+                            <span class="font-mono text-xs text-ink/40 uppercase tracking-widest">Gain estime</span>
+                            <span class="font-serif font-bold text-2xl text-coral">45h<span class="text-sm font-sans text-ink/40">/mois</span></span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-ink/40 uppercase tracking-widest">Phases</span>
+                            <div class="flex gap-2">
+                                <span class="w-3 h-3 bg-amber border border-ink"></span>
+                                <span class="w-3 h-3 bg-ink/10 border border-ink/20"></span>
+                                <span class="w-3 h-3 bg-ink/10 border border-ink/20"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h1 class="font-display font-black text-4xl sm:text-5xl md:text-7xl leading-[1.05] mb-8 mt-4 reveal">
-                Automatisation du<br>
-                <span class="text-gold">Parcours Avatar</span><br>
-                <span class="text-bk/40 text-3xl sm:text-4xl md:text-5xl">Conte de Faits</span>
-            </h1>
-            <p class="text-base md:text-lg font-sans max-w-2xl text-bk/70 mb-10 reveal">
-                Salut John, deja merci encore pour le call de l'autre jour, c'etait super clair de ton cote et ca m'a permis de bien comprendre comment vous fonctionnez au quotidien avec Mickael. J'ai pris le temps de tout poser a plat pour te faire un recap vraiment detaille de ce que je vais mettre en place pour vous.
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 s-reveal">
+        <span class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-[0.2em]">Scroll</span>
+        <div class="w-[1px] h-10 bg-ink/20 relative overflow-hidden">
+            <div class="w-full h-1/2 bg-amber absolute top-0" style="animation: scrollDown 1.5s ease-in-out infinite"></div>
+        </div>
+    </div>
+</section>
+
+
+<!-- MARQUEE -->
+<div class="border-y-2 border-ink bg-ink text-paper py-4 marquee">
+    <div class="marquee-track font-mono text-sm font-bold tracking-widest uppercase">
+        <span>Automatisation&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Integration&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;n8n&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Claude API&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;WordPress&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;WooCommerce&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;HubSpot&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Google Drive&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;RGPD&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Avatars IA&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;</span>
+        <span>Automatisation&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Integration&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;n8n&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Claude API&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;WordPress&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;WooCommerce&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;HubSpot&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Google Drive&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;RGPD&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;Avatars IA&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;</span>
+    </div>
+</div>
+
+
+<!-- LE POINT DE DEPART -->
+<section id="situation" class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div class="grid lg:grid-cols-12 gap-16">
+            <div class="lg:col-span-5 s-reveal">
+                <div class="sticky top-24">
+                    <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4">01 — Constat</span>
+                    <h2 class="font-serif font-black text-4xl md:text-5xl leading-[1.05] mb-6">
+                        Le point<br>de <span class="text-amber italic">depart</span>
+                    </h2>
+                    <div class="w-16 h-1 bg-amber mb-6"></div>
+                    <p class="text-ink/40 text-sm font-mono">Ce qui se passe aujourd'hui a chaque commande.</p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-8">
+                <div class="neo bg-white p-8 md:p-10 s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/70">
+                        Aujourd'hui, quand un client passe une commande sur votre site, voila ce qui se passe. Mickael recoit une notification, il va dans HubSpot, il recupere les informations du formulaire, il telecharge les photos une par une avec les mots de passe, il les renomme proprement, et ensuite il commence a creer les avatars de chaque personnage.
+                    </p>
+                </div>
+
+                <div class="neo bg-white p-8 md:p-10 s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/70">
+                        Une fois les avatars faits, toi tu les envoies au client pour validation. Et la, deux cas de figure. Soit le client est content et on avance. Soit le client te dit <strong class="text-ink font-semibold">"non, ma fille est brune, pas chatain"</strong> comme la dame de l'autre jour, et Mickael doit tout reprendre.
+                    </p>
+                </div>
+
+                <div class="neo bg-ink text-paper p-8 md:p-10 s-reveal">
+                    <p class="text-lg leading-relaxed text-paper/70">
+                        Ce process-la, sur une commande, ca prend facilement <span class="text-amber font-bold">30 a 45 minutes</span> rien que pour la partie avatar. Et quand tu multiplies ca par le nombre de commandes que vous avez chaque jour, ca fait des heures qui partent juste dans de la manipulation de fichiers, des allers-retours avec les clients, et du travail que le client lui-meme pourrait faire mieux que vous.
+                    </p>
+                </div>
+
+                <div class="neo-amber bg-cream p-8 md:p-10 s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/70">
+                        Parce que le client, il sait a quoi ressemble son enfant. Il sait si c'est les bons cheveux, le bon visage, la bonne couleur. Vous, vous devinez a partir d'une photo prise au soleil ou le gamin a les cheveux plus clairs que d'habitude.
+                    </p>
+                    <p class="text-2xl font-serif font-bold text-amber mt-6 italic">C'est exactement la que j'interviens.</p>
+                </div>
+
+                <div class="grid sm:grid-cols-3 gap-4 s-reveal">
+                    <div class="neo bg-coral/5 p-6 text-center">
+                        <div class="font-serif font-black text-4xl text-coral counter" data-target="45">0</div>
+                        <div class="font-mono text-[0.6rem] text-ink/40 mt-2 uppercase tracking-wider">min / commande</div>
+                    </div>
+                    <div class="neo bg-coral/5 p-6 text-center">
+                        <div class="font-serif font-black text-4xl text-coral">30%</div>
+                        <div class="font-mono text-[0.6rem] text-ink/40 mt-2 uppercase tracking-wider">retours avatar</div>
+                    </div>
+                    <div class="neo bg-coral/5 p-6 text-center">
+                        <div class="font-serif font-black text-4xl text-coral">&infin;</div>
+                        <div class="font-mono text-[0.6rem] text-ink/40 mt-2 uppercase tracking-wider">allers-retours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider max-w-[1400px] mx-auto"></div>
+
+
+<!-- CE QUE JE VAIS CONSTRUIRE -->
+<section id="solution" class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div class="text-center mb-20 s-reveal">
+            <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4">02 — La Solution</span>
+            <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-8">
+                Ce que je vais <span class="text-amber italic">construire</span>
+            </h2>
+            <p class="text-lg md:text-xl text-ink/60 max-w-3xl mx-auto leading-relaxed font-light">
+                Je vais mettre en place un systeme qui fait une chose simple : donner au client la possibilite de creer et valider ses propres avatars, directement apres sa commande, sans que Mickael ait besoin de toucher quoi que ce soit.
             </p>
-            <p class="text-base md:text-lg font-sans max-w-2xl text-bk/70 mb-10 reveal">
-                L'idee c'est que tu puisses lire ce document et comprendre exactement ce qui va se passer, comment ca va marcher, et surtout ce que ca va changer dans votre quotidien. Prends un cafe, installe-toi, je t'explique tout.
+        </div>
+
+        <div class="neo bg-white p-8 md:p-12 mb-16 max-w-3xl mx-auto s-reveal">
+            <p class="text-lg md:text-xl leading-relaxed text-ink/70">
+                Le client recoit un mail, il clique sur un lien, il arrive sur une page dediee, il voit ses personnages, il genere les avatars, il choisit ceux qui lui plaisent, il valide, et vous recevez les avatars tout prets dans votre dossier. Mickael peut directement commencer a travailler sur les scenes.
             </p>
-            <div class="flex flex-wrap gap-3 reveal">
-                <span class="tag bg-bk text-white">n8n</span>
-                <span class="tag bg-bk text-white">Claude API</span>
-                <span class="tag bg-bk text-white">WordPress</span>
-                <span class="tag bg-bk text-white">WooCommerce</span>
-                <span class="tag bg-bk text-white">HubSpot</span>
-                <span class="tag bg-bk text-white">Google Drive</span>
+            <p class="text-lg md:text-xl leading-relaxed text-ink/80 mt-6 font-medium">
+                Pour que ca marche, il y a trois parties a construire. Je vais te les expliquer une par une.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 s-reveal">
+            <div class="neo bg-white p-8 relative group">
+                <div class="font-serif font-black text-6xl text-amber/20 absolute top-4 right-6 group-hover:text-amber/40 transition-colors">01</div>
+                <span class="pill bg-amber/10 border-amber text-amber-d mb-6 inline-flex">Partie 1</span>
+                <h3 class="font-serif font-bold text-2xl mb-4">Le Socle<br>Technique</h3>
+                <p class="text-sm text-ink/50 leading-relaxed">Identifiants uniques, machine d'etats, webhooks automatiques entre WordPress, WooCommerce et l'application.</p>
+            </div>
+            <div class="neo bg-white p-8 relative group">
+                <div class="font-serif font-black text-6xl text-amber/20 absolute top-4 right-6 group-hover:text-amber/40 transition-colors">02</div>
+                <span class="pill bg-amber/10 border-amber text-amber-d mb-6 inline-flex">Partie 2</span>
+                <h3 class="font-serif font-bold text-2xl mb-4">Les Notifications<br>Mail</h3>
+                <p class="text-sm text-ink/50 leading-relaxed">Mails automatiques post-paiement, relances intelligentes a J+1 et J+2, historique complet et trace.</p>
+            </div>
+            <div class="neo bg-white p-8 relative group">
+                <div class="font-serif font-black text-6xl text-amber/20 absolute top-4 right-6 group-hover:text-amber/40 transition-colors">03</div>
+                <span class="pill bg-amber/10 border-amber text-amber-d mb-6 inline-flex">Partie 3</span>
+                <h3 class="font-serif font-bold text-2xl mb-4">L'Espace<br>Client</h3>
+                <p class="text-sm text-ink/50 leading-relaxed">Interface dediee, generation IA d'avatars en self-service, validation en totale autonomie.</p>
             </div>
         </div>
     </div>
-</header>
+</section>
 
-<!-- ============ SECTION 2 — SOMMAIRE ============ -->
-<section id="sommaire" class="max-w-6xl mx-auto px-4 md:px-8 pb-20">
-    <div class="grid md:grid-cols-3 gap-6">
-        <div class="brut p-6 md:col-span-1">
-            <h2 class="font-display font-bold text-xl mb-4">Sommaire</h2>
-            <p class="text-sm text-bk/60 mb-6 font-mono">25 sections detaillees</p>
-            <div class="space-y-1 max-h-[400px] overflow-y-auto pr-2" id="toc-container">
+
+<!-- SOCLE TECHNIQUE -->
+<section id="technique" class="bg-ink text-paper py-24 md:py-40 border-y-2 border-ink">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">03 — Partie 1</span>
+        <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-6 s-reveal">
+            Le Socle <span class="text-amber italic">Technique</span>
+        </h2>
+        <div class="w-16 h-1 bg-amber mb-16 s-reveal"></div>
+
+        <div class="grid lg:grid-cols-2 gap-16">
+            <div class="space-y-8">
+                <div class="s-reveal">
+                    <p class="text-lg leading-relaxed text-paper/60">
+                        C'est la fondation de tout le systeme. Aujourd'hui, quand une commande arrive, vous n'avez pas de moyen simple de suivre ou elle en est dans le processus. Est-ce que le client a paye ? Est-ce qu'il a cree ses avatars ? Est-ce qu'il les a valides ? Tout ca, vous le gerez de tete ou avec des notes dans HubSpot.
+                    </p>
+                </div>
+
+                <div class="s-reveal">
+                    <h3 class="font-serif font-bold text-2xl mb-4 text-amber">Identifiant unique par livre</h3>
+                    <p class="text-lg leading-relaxed text-paper/60">
+                        Ce que je vais mettre en place, c'est un identifiant unique pour chaque livre commande. Pas pour chaque commande, pour chaque livre. Parce que comme tu me l'as explique, un client peut commander 3 ou 5 livres d'un coup. Donc chaque livre aura son propre identifiant, base sur le numero du formulaire, le numero de la commande et le numero de l'entree. Comme ca, si tu vois trois livres avec le meme numero de commande au milieu, tu sais tout de suite qu'ils font partie de la meme commande. C'est exactement le systeme que tu m'as decrit.
+                    </p>
+                </div>
+
+                <div class="border-2 border-paper/20 p-6 font-mono s-reveal">
+                    <div class="text-xs text-paper/30 mb-3 uppercase tracking-wider">Exemple d'identifiant</div>
+                    <div class="text-3xl md:text-4xl font-bold">
+                        CDF-<span class="text-amber">202602</span>-00087
+                    </div>
+                    <div class="flex gap-8 mt-3 text-xs text-paper/30">
+                        <span>Prefixe</span><span class="text-amber/60">Date</span><span>Sequence</span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="md:col-span-2 grid sm:grid-cols-3 gap-4">
-            <div class="brut p-6 text-center">
-                <div class="font-display font-black text-4xl text-gold mb-2">3</div>
-                <div class="font-mono text-[0.65rem] tracking-wider uppercase text-bk/60">Parties Principales</div>
-            </div>
-            <div class="brut p-6 text-center">
-                <div class="font-display font-black text-4xl text-gold mb-2">45h</div>
-                <div class="font-mono text-[0.65rem] tracking-wider uppercase text-bk/60">Economisees / Mois</div>
-            </div>
-            <div class="brut p-6 text-center">
-                <div class="font-display font-black text-4xl text-gold mb-2">4.5k</div>
-                <div class="font-mono text-[0.65rem] tracking-wider uppercase text-bk/60">Euros HT</div>
-            </div>
-            <div class="bg-bk text-white brd p-6 sm:col-span-3">
-                <div class="flex items-center gap-4 flex-wrap">
-                    <span class="tag bg-gold text-bk">Socle Technique</span>
-                    <span class="text-white/30 font-mono">+</span>
-                    <span class="tag bg-gold text-bk">Notifications Mail</span>
-                    <span class="text-white/30 font-mono">+</span>
-                    <span class="tag bg-gold text-bk">Espace Client</span>
-                    <span class="text-white/30 font-mono">=</span>
-                    <span class="font-display font-bold text-gold text-lg">Autonomie Totale</span>
+
+            <div class="space-y-8">
+                <div class="s-reveal">
+                    <h3 class="font-serif font-bold text-2xl mb-4 text-amber">Suivi d'etat en temps reel</h3>
+                    <p class="text-lg leading-relaxed text-paper/60 mb-8">
+                        Ensuite, chaque livre va avoir un etat qui evolue au fil du temps. Au debut c'est "en attente", puis quand le client paye ca passe a "paye", ensuite quand il recoit le lien pour creer ses avatars ca passe a "avatars en attente", puis quand il valide ca passe a "avatars valides". C'est comme un parcours avec des etapes. A tout moment tu peux ouvrir l'administration et voir ou en est chaque livre. Tu sais exactement lequel attend une validation client, lequel est pret a travailler, lequel est bloque depuis deux jours. Plus besoin de chercher dans les mails ou de demander a Mickael.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-3 items-center s-reveal">
+                    <div class="pill border-paper/30 text-paper/50 bg-paper/5">En attente</div>
+                    <span class="text-paper/20 font-mono text-xl">&rarr;</span>
+                    <div class="pill border-amber text-amber bg-amber/10">Paye</div>
+                    <span class="text-paper/20 font-mono text-xl">&rarr;</span>
+                    <div class="pill border-sky text-sky bg-sky/10">Avatars en attente</div>
+                    <span class="text-paper/20 font-mono text-xl">&rarr;</span>
+                    <div class="pill border-mint text-mint bg-mint/10">Avatars valides</div>
+                </div>
+
+                <div class="s-reveal">
+                    <h3 class="font-serif font-bold text-2xl mb-4 text-amber">Connexions automatiques</h3>
+                    <p class="text-lg leading-relaxed text-paper/60">
+                        Pour relier tout ca, je vais creer des points de connexion entre votre site WordPress, le systeme de paiement WooCommerce, et la nouvelle application. Quand un paiement est confirme sur WooCommerce, une alerte automatique est envoyee au systeme central qui dit "nouveau livre paye, lance le processus". Tout est automatique, personne n'a besoin d'appuyer sur un bouton.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-4 gap-3 s-reveal">
+                    <div class="border-2 border-paper/20 p-3 text-center text-xs font-mono text-paper/40 hover:border-amber hover:text-amber transition-colors">WordPress</div>
+                    <div class="border-2 border-paper/20 p-3 text-center text-xs font-mono text-paper/40 hover:border-amber hover:text-amber transition-colors">Woo</div>
+                    <div class="border-2 border-amber p-3 text-center text-xs font-mono text-amber bg-amber/10">n8n</div>
+                    <div class="border-2 border-paper/20 p-3 text-center text-xs font-mono text-paper/40 hover:border-amber hover:text-amber transition-colors">App</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ============ SECTION 3 — LE POINT DE DEPART ============ -->
-<section id="s3" class="brd-t brd-b bg-white">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">01</div>
-            <div>
-                <span class="tag bg-bk text-gold mb-2">Constat</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Le point de depart</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>Aujourd'hui, quand un client passe une commande sur votre site, voila ce qui se passe. Mickael recoit une notification, il va dans HubSpot, il recupere les informations du formulaire, il telecharge les photos une par une avec les mots de passe, il les renomme proprement, et ensuite il commence a creer les avatars de chaque personnage.</p>
-            <p>Une fois les avatars faits, toi tu les envoies au client pour validation. Et la, deux cas de figure. Soit le client est content et on avance. Soit le client te dit <strong class="text-bk">"non, ma fille est brune, pas chatain"</strong> comme la dame de l'autre jour, et Mickael doit tout reprendre.</p>
-        </div>
-    </div>
-</section>
 
-<!-- ============ SECTION 4 — LE PROBLEME ============ -->
-<section id="s4" class="bg-bk text-white">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge" style="background:#C9A962;color:#1a1a1a;">02</div>
-            <div>
-                <span class="tag bg-red text-white mb-2">Probleme</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Le probleme concret</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-white/70 leading-relaxed reveal">
-            <p>Ce process-la, sur une commande, ca prend facilement <strong class="text-gold">30 a 45 minutes</strong> rien que pour la partie avatar. Et quand tu multiplies ca par le nombre de commandes que vous avez chaque jour, ca fait des heures qui partent juste dans de la manipulation de fichiers, des allers-retours avec les clients, et du travail que le client lui-meme pourrait faire mieux que vous.</p>
-            <p>Parce que le client, il sait a quoi ressemble son enfant. Il sait si c'est les bons cheveux, le bon visage, la bonne couleur. Vous, vous devinez a partir d'une photo prise au soleil ou le gamin a les cheveux plus clairs que d'habitude.</p>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-4 mt-12 reveal">
-            <div class="border-2 border-white/20 p-6">
-                <div class="font-display font-black text-3xl text-red mb-2">30-45</div>
-                <div class="font-mono text-[0.65rem] text-white/50 uppercase tracking-wider">Minutes par commande</div>
-            </div>
-            <div class="border-2 border-white/20 p-6">
-                <div class="font-display font-black text-3xl text-red mb-2">20-30%</div>
-                <div class="font-mono text-[0.65rem] text-white/50 uppercase tracking-wider">Retours avatar client</div>
-            </div>
-            <div class="border-2 border-white/20 p-6">
-                <div class="font-display font-black text-3xl text-red mb-2">&infin;</div>
-                <div class="font-mono text-[0.65rem] text-white/50 uppercase tracking-wider">Allers-retours mail</div>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- NOTIFICATIONS MAIL -->
+<section class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">04 — Partie 2</span>
+        <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-6 s-reveal">
+            Les Notifications <span class="text-amber italic">Mail</span>
+        </h2>
+        <p class="text-lg text-ink/60 max-w-2xl mb-16 s-reveal">
+            Une fois que le client a paye, il faut qu'il aille creer ses avatars. Mais on ne peut pas compter sur le fait qu'il va y penser tout seul. Donc je mets en place un systeme de mails automatiques.
+        </p>
 
-<!-- ============ SECTION 5 — C'EST LA QUE J'INTERVIENS ============ -->
-<section id="s5" class="brd-t">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">03</div>
-            <div>
-                <span class="tag bg-grn text-white mb-2">Solution</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">C'est la que j'interviens</h2>
-            </div>
-        </div>
-        <div class="brut-gold p-8 md:p-12 max-w-3xl pulse-border reveal">
-            <p class="text-lg md:text-xl font-medium leading-relaxed text-bk/80">C'est exactement la que j'interviens.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 6 — CE QUE JE VAIS CONSTRUIRE ============ -->
-<section id="s6" class="brd-t bg-gry">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">04</div>
-            <div>
-                <span class="tag bg-bk text-gold mb-2">Vue d'ensemble</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Ce que je vais construire</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-12 reveal">
-            <p>Je vais mettre en place un systeme qui fait une chose simple : <strong class="text-bk">donner au client la possibilite de creer et valider ses propres avatars</strong>, directement apres sa commande, sans que Mickael ait besoin de toucher quoi que ce soit.</p>
-            <p>Le client recoit un mail, il clique sur un lien, il arrive sur une page dediee, il voit ses personnages, il genere les avatars, il choisit ceux qui lui plaisent, il valide, et vous recevez les avatars tout prets dans votre dossier. Mickael peut directement commencer a travailler sur les scenes.</p>
-            <p><strong class="text-bk">Pour que ca marche, il y a trois parties a construire.</strong> Je vais te les expliquer une par une.</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6 reveal">
-            <div class="brut p-6 relative">
-                <div class="absolute -top-3 left-4"><span class="tag bg-bk text-gold">Partie 1</span></div>
-                <h3 class="font-display font-bold text-xl mt-4 mb-3">Le Socle Technique</h3>
-                <p class="text-sm text-bk/60">Identifiants uniques, suivi d'etats, connexions automatiques entre vos outils.</p>
-            </div>
-            <div class="brut p-6 relative">
-                <div class="absolute -top-3 left-4"><span class="tag bg-bk text-gold">Partie 2</span></div>
-                <h3 class="font-display font-bold text-xl mt-4 mb-3">Les Notifications Mail</h3>
-                <p class="text-sm text-bk/60">Mails automatiques post-paiement, relances intelligentes, historique complet.</p>
-            </div>
-            <div class="brut p-6 relative">
-                <div class="absolute -top-3 left-4"><span class="tag bg-bk text-gold">Partie 3</span></div>
-                <h3 class="font-display font-bold text-xl mt-4 mb-3">L'Espace Client</h3>
-                <p class="text-sm text-bk/60">Interface dediee, generation IA d'avatars, validation en autonomie.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 7 — PARTIE 1 : SOCLE TECHNIQUE ============ -->
-<section id="s7" class="bg-bk text-white brd-t">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-6">
-        <div class="flex items-center gap-3">
-            <span class="tag bg-gold text-bk">Partie 1</span>
-            <span class="font-display font-bold text-xl">Le Socle Technique</span>
-        </div>
-    </div>
-</section>
-<section id="s7b" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">05</div>
-            <div>
-                <span class="tag bg-blu text-white mb-2">Fondation</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">La fondation de tout le systeme</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>C'est la fondation de tout le systeme. Aujourd'hui, quand une commande arrive, vous n'avez pas de moyen simple de suivre ou elle en est dans le processus. Est-ce que le client a paye ? Est-ce qu'il a cree ses avatars ? Est-ce qu'il les a valides ? Tout ca, vous le gerez de tete ou avec des notes dans HubSpot.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 8 — IDENTIFIANT UNIQUE ============ -->
-<section id="s8" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">06</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Identifiant</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Un identifiant unique par livre</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-12 reveal">
-            <p>Ce que je vais mettre en place, c'est un identifiant unique pour chaque livre commande. Pas pour chaque commande, pour chaque livre. Parce que comme tu me l'as explique, un client peut commander 3 ou 5 livres d'un coup.</p>
-            <p>Donc chaque livre aura son propre identifiant, base sur le numero du formulaire, le numero de la commande et le numero de l'entree. Comme ca, si tu vois trois livres avec le meme numero de commande au milieu, tu sais tout de suite qu'ils font partie de la meme commande. C'est exactement le systeme que tu m'as decrit.</p>
-        </div>
-        <div class="brut bg-bk text-white p-6 md:p-8 inline-block reveal">
-            <div class="font-mono text-xs text-gold/60 mb-2 tracking-wider">// EXEMPLE D'IDENTIFIANT</div>
-            <div class="font-mono text-2xl md:text-3xl font-bold tracking-wide">
-                CDF-<span class="text-gold">202602</span>-<span class="text-white/60">00087</span>
-            </div>
-            <div class="flex gap-6 mt-4 font-mono text-xs text-white/40">
-                <span>Prefixe</span>
-                <span class="text-gold/60">Date</span>
-                <span>Numero</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 9 — SUIVI D'ETAT ============ -->
-<section id="s9" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">07</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Tracking</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Suivi d'etat en temps reel</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-12 reveal">
-            <p>Ensuite, chaque livre va avoir un etat qui evolue au fil du temps. C'est comme un parcours avec des etapes. A tout moment tu peux ouvrir l'administration et voir ou en est chaque livre. Tu sais exactement lequel attend une validation client, lequel est pret a travailler, lequel est bloque depuis deux jours. Plus besoin de chercher dans les mails ou de demander a Mickael.</p>
-        </div>
-        <div class="flex flex-wrap gap-4 reveal">
-            <div class="state-pill bg-white"><div class="state-dot bg-bk/30"></div> En attente</div>
-            <div class="font-mono text-bk/30 flex items-center">&rarr;</div>
-            <div class="state-pill bg-white"><div class="state-dot bg-gold"></div> Paye</div>
-            <div class="font-mono text-bk/30 flex items-center">&rarr;</div>
-            <div class="state-pill bg-white"><div class="state-dot bg-blu"></div> Avatars en attente</div>
-            <div class="font-mono text-bk/30 flex items-center">&rarr;</div>
-            <div class="state-pill bg-white"><div class="state-dot bg-grn"></div> Avatars valides</div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 10 — CONNEXIONS AUTOMATIQUES ============ -->
-<section id="s10" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">08</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Webhooks</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Les connexions automatiques</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-12 reveal">
-            <p>Pour relier tout ca, je vais creer des points de connexion entre votre site WordPress, le systeme de paiement WooCommerce, et la nouvelle application. Quand un paiement est confirme sur WooCommerce, une alerte automatique est envoyee au systeme central qui dit <strong class="text-bk">"nouveau livre paye, lance le processus"</strong>. Tout est automatique, personne n'a besoin d'appuyer sur un bouton.</p>
-        </div>
-        <div class="grid sm:grid-cols-4 gap-3 reveal">
-            <div class="brut p-4 text-center"><div class="font-mono text-xs font-bold">WordPress</div></div>
-            <div class="brut p-4 text-center bg-gold"><div class="font-mono text-xs font-bold">WooCommerce</div></div>
-            <div class="brut p-4 text-center"><div class="font-mono text-xs font-bold">n8n</div></div>
-            <div class="brut p-4 text-center bg-gold"><div class="font-mono text-xs font-bold">App Client</div></div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 11 — PARTIE 2 HEADER ============ -->
-<section id="s11" class="bg-bk text-white brd-t">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-6">
-        <div class="flex items-center gap-3">
-            <span class="tag bg-gold text-bk">Partie 2</span>
-            <span class="font-display font-bold text-xl">Les Notifications par Mail</span>
-        </div>
-    </div>
-</section>
-<section id="s11b" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">09</div>
-            <div>
-                <span class="tag bg-bk text-gold mb-2">Emails</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Les notifications par mail</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>Une fois que le client a paye, il faut qu'il aille creer ses avatars. Mais on ne peut pas compter sur le fait qu'il va y penser tout seul. Donc je mets en place un systeme de mails automatiques.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 12 — MAIL 1 ============ -->
-<section id="s12" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">10</div>
-            <div>
-                <span class="tag bg-grn text-white mb-2">Immediat</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Mail #1 — Post-paiement</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-10 reveal">
-            <p>Le premier mail part tout de suite apres le paiement. Le client recoit un message du genre :</p>
-        </div>
-        <div class="mail-card max-w-2xl reveal">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="state-dot bg-grn"></div>
-                <span class="font-mono text-xs text-bk/50 uppercase tracking-wider">Envoye immediatement</span>
-            </div>
-            <p class="text-bk/80 leading-relaxed italic">"Merci pour ta commande chez Conte de Faits ! Pour qu'on puisse commencer a travailler sur ton livre, on t'invite a creer les avatars de tes personnages. Ca prend 5 minutes et ca nous permet de s'assurer que les personnages te ressemblent parfaitement. Clique ici pour commencer."</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 13 — MAIL 2 ============ -->
-<section id="s13" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">11</div>
-            <div>
-                <span class="tag bg-gold text-bk mb-2">+24h</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Mail #2 — Relance 24h</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-10 reveal">
-            <p>Si au bout de 24 heures le client n'a toujours pas valide ses avatars, un deuxieme mail part automatiquement. Un petit rappel amical, rien de mechant :</p>
-        </div>
-        <div class="mail-card max-w-2xl reveal">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="state-dot bg-gold"></div>
-                <span class="font-mono text-xs text-bk/50 uppercase tracking-wider">Envoye a +24h</span>
-            </div>
-            <p class="text-bk/80 leading-relaxed italic">"On a vu que tu n'as pas encore cree tes avatars pour ton livre. N'hesite pas a le faire des maintenant pour qu'on puisse avancer sur ta commande."</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 14 — MAIL 3 ============ -->
-<section id="s14" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">12</div>
-            <div>
-                <span class="tag bg-red text-white mb-2">+48h</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Mail #3 — Dernier rappel</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-10 reveal">
-            <p>Et si apres 48 heures il n'a toujours rien fait, un dernier mail part :</p>
-        </div>
-        <div class="mail-card max-w-2xl border-red reveal" style="border-color:#e53935;">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="state-dot bg-red"></div>
-                <span class="font-mono text-xs text-bk/50 uppercase tracking-wider">Dernier rappel a +48h</span>
-            </div>
-            <p class="text-bk/80 leading-relaxed italic">"C'est notre dernier rappel. Pour respecter les delais de livraison, on a besoin que tu valides tes avatars aujourd'hui. Si on n'a pas de retour de ta part, notre equipe creera les avatars elle-meme, mais il pourrait y avoir des ajustements supplementaires a prevoir."</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 15 — INTELLIGENCE MAIL ============ -->
-<section id="s15" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">13</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Smart</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">L'intelligence du systeme</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>Le systeme est assez intelligent pour ne jamais envoyer deux fois le meme mail. Si le client valide ses avatars entre le premier et le deuxieme mail, le deuxieme ne part jamais.</p>
-            <p>Et toi, tu as un historique complet de ce qui a ete envoye, quand, et a qui. Tu peux voir que Madame Dupont a recu le mail 1 le lundi a 14h, qu'elle a ouvert le lien le mardi a 9h, et qu'elle a valide ses avatars le mardi a 9h15. <strong class="text-bk">Tout est trace.</strong></p>
-        </div>
-        <div class="mt-12 brut p-6 max-w-2xl reveal">
-            <div class="font-mono text-xs text-bk/50 uppercase tracking-wider mb-4">Exemple de trace — Mme Dupont</div>
-            <div class="space-y-3 font-mono text-sm">
-                <div class="flex items-center gap-3">
-                    <div class="state-dot bg-grn"></div>
-                    <span class="text-bk/50">Lun 14:00</span>
-                    <span>Mail #1 envoye</span>
+        <div class="grid lg:grid-cols-3 gap-8 mb-16">
+            <div class="s-reveal">
+                <div class="mail-mock">
+                    <div class="mail-mock-bar">
+                        <div class="mail-mock-dot bg-mint"></div>
+                        <div class="mail-mock-dot bg-amber"></div>
+                        <div class="mail-mock-dot bg-coral"></div>
+                        <span class="font-mono text-[0.6rem] text-paper/50 ml-3">Immediat</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="sticker bg-mint text-ink border-ink" style="transform:rotate(0deg);font-size:0.55rem;">Mail #1</span>
+                            <span class="font-mono text-[0.6rem] text-ink/30">Post-paiement</span>
+                        </div>
+                        <p class="text-sm text-ink/60 leading-relaxed italic">
+                            "Merci pour ta commande chez Conte de Faits ! Pour qu'on puisse commencer a travailler sur ton livre, on t'invite a creer les avatars de tes personnages. Ca prend 5 minutes et ca nous permet de s'assurer que les personnages te ressemblent parfaitement. Clique ici pour commencer."
+                        </p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="state-dot bg-blu"></div>
-                    <span class="text-bk/50">Mar 09:00</span>
-                    <span>Lien ouvert</span>
+            </div>
+
+            <div class="s-reveal">
+                <div class="mail-mock">
+                    <div class="mail-mock-bar">
+                        <div class="mail-mock-dot bg-mint"></div>
+                        <div class="mail-mock-dot bg-amber"></div>
+                        <div class="mail-mock-dot bg-coral"></div>
+                        <span class="font-mono text-[0.6rem] text-paper/50 ml-3">+24 heures</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="sticker bg-amber text-ink border-ink" style="transform:rotate(0deg);font-size:0.55rem;">Mail #2</span>
+                            <span class="font-mono text-[0.6rem] text-ink/30">Relance amicale</span>
+                        </div>
+                        <p class="text-sm text-ink/60 leading-relaxed italic">
+                            "On a vu que tu n'as pas encore cree tes avatars pour ton livre. N'hesite pas a le faire des maintenant pour qu'on puisse avancer sur ta commande."
+                        </p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="state-dot bg-gold"></div>
-                    <span class="text-bk/50">Mar 09:15</span>
-                    <span>Avatars valides</span>
+            </div>
+
+            <div class="s-reveal">
+                <div class="mail-mock">
+                    <div class="mail-mock-bar">
+                        <div class="mail-mock-dot bg-mint"></div>
+                        <div class="mail-mock-dot bg-amber"></div>
+                        <div class="mail-mock-dot bg-coral"></div>
+                        <span class="font-mono text-[0.6rem] text-paper/50 ml-3">+48 heures</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="sticker bg-coral text-white border-ink" style="transform:rotate(0deg);font-size:0.55rem;">Mail #3</span>
+                            <span class="font-mono text-[0.6rem] text-ink/30">Dernier rappel</span>
+                        </div>
+                        <p class="text-sm text-ink/60 leading-relaxed italic">
+                            "C'est notre dernier rappel. Pour respecter les delais de livraison, on a besoin que tu valides tes avatars aujourd'hui. Si on n'a pas de retour de ta part, notre equipe creera les avatars elle-meme, mais il pourrait y avoir des ajustements supplementaires a prevoir."
+                        </p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="state-dot bg-bk/30"></div>
-                    <span class="text-bk/50">Mar 14:00</span>
-                    <span class="line-through text-bk/30">Mail #2 annule</span>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div class="neo bg-white p-8 md:p-10 s-reveal">
+                <h3 class="font-serif font-bold text-xl mb-4">Systeme intelligent</h3>
+                <p class="text-base leading-relaxed text-ink/60">
+                    Le systeme est assez intelligent pour ne jamais envoyer deux fois le meme mail. Si le client valide ses avatars entre le premier et le deuxieme mail, le deuxieme ne part jamais. Et toi, tu as un historique complet de ce qui a ete envoye, quand, et a qui.
+                </p>
+            </div>
+            <div class="neo bg-white p-8 md:p-10 s-reveal">
+                <h3 class="font-serif font-bold text-xl mb-4">Tout est trace</h3>
+                <p class="text-base leading-relaxed text-ink/60 mb-4">
+                    Tu peux voir que Madame Dupont a recu le mail 1 le lundi a 14h, qu'elle a ouvert le lien le mardi a 9h, et qu'elle a valide ses avatars le mardi a 9h15.
+                </p>
+                <div class="space-y-2 font-mono text-xs">
+                    <div class="flex items-center gap-3 text-ink/50"><span class="w-2 h-2 bg-mint rounded-full"></span>Lun 14:00 — Mail #1 envoye</div>
+                    <div class="flex items-center gap-3 text-ink/50"><span class="w-2 h-2 bg-sky rounded-full"></span>Mar 09:00 — Lien ouvert</div>
+                    <div class="flex items-center gap-3 text-ink/50"><span class="w-2 h-2 bg-amber rounded-full"></span>Mar 09:15 — Avatars valides</div>
+                    <div class="flex items-center gap-3 text-ink/20 line-through"><span class="w-2 h-2 bg-ink/10 rounded-full"></span>Mar 14:00 — Mail #2 annule</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA WHATSAPP #1 -->
-<section class="brd-t brd-b bg-gold">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="divider max-w-[1400px] mx-auto"></div>
+
+
+<!-- L'ESPACE CLIENT -->
+<section class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">05 — Partie 3</span>
+        <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-6 s-reveal">
+            L'Espace <span class="text-amber italic">Client</span>
+        </h2>
+        <div class="w-16 h-1 bg-amber mb-8 s-reveal"></div>
+
+        <div class="grid lg:grid-cols-12 gap-16">
+            <div class="lg:col-span-5 space-y-8">
+                <div class="s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/60">
+                        C'est le gros morceau et c'est la ou le client va passer du temps. C'est une page web accessible sur un sous-domaine separe, par exemple <span class="font-mono text-sm bg-ink/5 px-2 py-1 border border-ink/10">app.contedefaits.com</span>. Je fais ca sur un sous-domaine separe volontairement pour ne pas toucher a votre site WordPress. Ton site reste tel qu'il est, il ne devient pas plus lourd, il n'y a aucun risque de casser quoi que ce soit dessus. L'espace client vit a cote, independamment.
+                    </p>
+                </div>
+                <div class="s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/60">
+                        Quand le client clique sur le lien dans son mail, il arrive sur cette page. L'acces est securise avec un identifiant lie a sa commande, donc il ne peut voir que ses propres livres, pas ceux des autres clients.
+                    </p>
+                </div>
+                <div class="s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/60">
+                        La page va avoir le look de Conte de Faits. On garde vos couleurs, votre style, votre logo. Le client ne doit pas avoir l'impression d'aller sur un autre site, il doit se sentir chez vous. Une interface claire, chaleureuse, avec des tons qui correspondent a votre univers. <strong class="text-ink font-semibold">C'est pas une page technique moche, c'est une vraie experience qui s'inscrit dans le parcours Conte de Faits.</strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-8">
+                <div class="neo bg-white s-reveal overflow-hidden">
+                    <div class="bg-ink p-4 flex items-center gap-3">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-coral"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber"></div>
+                            <div class="w-3 h-3 rounded-full bg-mint"></div>
+                        </div>
+                        <div class="font-mono text-xs text-paper/40 ml-2">app.contedefaits.com</div>
+                    </div>
+                    <div class="p-6 md:p-10">
+                        <div class="border-2 border-ink/10 p-6 mb-6">
+                            <h4 class="font-serif font-bold text-xl mb-1">Livre 1 — Personnage principal : <span class="text-amber">Leonie</span></h4>
+                            <div class="mt-4 space-y-1 font-mono text-sm text-ink/50">
+                                <div>Cheveux : chatain, mi-longs</div>
+                                <div>Yeux : marrons</div>
+                                <div>Particularite : tache de naissance sur la joue droite</div>
+                            </div>
+                            <div class="flex gap-3 mt-4">
+                                <div class="w-14 h-14 bg-warm/50 border-2 border-ink/10 flex items-center justify-center text-lg">&#128247;</div>
+                                <div class="w-14 h-14 bg-warm/50 border-2 border-ink/10 flex items-center justify-center text-lg">&#128247;</div>
+                                <div class="w-14 h-14 bg-warm/50 border-2 border-ink/10 flex items-center justify-center text-lg">&#128247;</div>
+                            </div>
+                        </div>
+                        <div class="text-center p-4 bg-amber/10 border-2 border-amber font-semibold text-amber-d cursor-pointer hover:bg-amber/20 transition-colors">
+                            Generer mon avatar
+                        </div>
+                        <div class="flex gap-3 mt-6 justify-center">
+                            <div class="w-16 h-16 bg-warm/30 border-2 border-ink/10 flex items-center justify-center font-mono text-xs text-ink/30">v1</div>
+                            <div class="w-16 h-16 bg-warm/30 border-2 border-ink/10 flex items-center justify-center font-mono text-xs text-ink/30">v2</div>
+                            <div class="w-16 h-16 bg-amber/10 border-2 border-amber flex items-center justify-center font-mono text-xs text-amber-d font-bold relative">
+                                v3
+                                <div class="absolute -top-2 -right-2 w-5 h-5 bg-amber border-2 border-ink flex items-center justify-center text-[0.5rem] font-bold">&check;</div>
+                            </div>
+                            <div class="w-16 h-16 bg-warm/30 border-2 border-ink/10 flex items-center justify-center font-mono text-xs text-ink/30">v4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/60 mb-6">
+                        Ensuite, il y a un bouton "Generer mon avatar". Elle clique dessus, et en quelques secondes, le systeme utilise l'intelligence artificielle pour creer un avatar de Leonie en style 3D cartoon, en se basant sur les photos et les descriptions physiques. L'avatar apparait en dessous sous forme de vignette.
+                    </p>
+                    <p class="text-lg leading-relaxed text-ink/60">
+                        Si le premier avatar ne lui plait pas, pas de souci. Elle peut regenerer. <strong class="text-ink font-semibold">Elle a entre 3 et 5 essais inclus par personnage.</strong> C'est suffisant pour obtenir un resultat qui correspond, et ca permet de maitriser les couts de generation. A chaque generation, le nouvel avatar s'ajoute a cote des precedents en vignettes carrees. Elle voit tous les avatars generes cote a cote, elle peut comparer, et elle clique sur celui qu'elle prefere pour le selectionner. Un petit cadre ou un check apparait sur l'avatar selectionne pour qu'elle sache lequel est actif.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4 s-reveal">
+                    <div class="neo-sm bg-white p-5">
+                        <span class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-wider">Personnage secondaire 1</span>
+                        <h4 class="font-serif font-bold text-lg mt-1">Papa — <span class="text-amber">Julien</span></h4>
+                        <p class="text-xs text-ink/40 font-mono mt-2">Cheveux : bruns, courts. Barbe : oui. Lunettes : non.</p>
+                        <p class="text-sm text-ink/50 mt-3">Et elle fait pareil : elle genere l'avatar de Julien, elle choisit celui qui lui plait, elle selectionne.</p>
+                    </div>
+                    <div class="neo-sm bg-white p-5">
+                        <span class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-wider">Personnage secondaire 2</span>
+                        <h4 class="font-serif font-bold text-lg mt-1">Doudou — <span class="text-amber">Monsieur Lapin</span></h4>
+                        <p class="text-sm text-ink/50 mt-3">Et la aussi, meme process. Que ce soit un humain, un animal, un doudou, le systeme gere.</p>
+                    </div>
+                </div>
+
+                <div class="neo bg-amber/10 border-amber p-8 s-reveal" style="box-shadow: 6px 6px 0 #d4a843;">
+                    <p class="text-lg leading-relaxed text-ink/70">
+                        Une fois que tous les personnages ont leur avatar selectionne, un bouton "Je valide tous mes avatars" apparait en bas de page. Elle clique, une petite confirmation lui demande "Tu es sur ? On part sur ces avatars pour creer ton livre." Elle confirme, et c'est termine de son cote. Elle voit un message du genre <strong class="text-ink">"Merci ! Tes avatars ont bien ete envoyes a notre equipe. On s'occupe de tout maintenant."</strong>
+                    </p>
+                    <p class="text-lg leading-relaxed text-ink/70 mt-4">
+                        A ce moment-la, de votre cote, les avatars valides arrivent directement dans votre Google Drive, dans un dossier bien nomme avec l'identifiant du livre. Mickael ouvre le Drive, il a les avatars tout prets, il sait que le client les a valides, il peut commencer a bosser sur les scenes tout de suite. <strong class="text-ink">Zero allers-retours, zero mauvaises surprises.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- CTA INTERLUDE -->
+<section class="bg-amber border-y-2 border-ink py-12">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-            <p class="font-display font-bold text-xl md:text-2xl text-bk">Une question sur les notifications ?</p>
-            <p class="text-bk/60 text-sm mt-1">Je reponds sous 2h en moyenne.</p>
+            <h3 class="font-serif font-bold text-2xl md:text-3xl text-ink">Des questions jusqu'ici ?</h3>
+            <p class="text-ink/60 mt-1">Je reponds sous 2h en moyenne.</p>
         </div>
-        <a href="https://wa.me/33626105640" target="_blank" class="wa-btn">
-            <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Discutons sur WhatsApp
+        <a href="https://wa.me/33626105640" target="_blank" class="mag-btn bg-ink text-paper">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Discuter sur WhatsApp
         </a>
     </div>
 </section>
 
-<!-- ============ SECTION 16 — PARTIE 3 HEADER ============ -->
-<section id="s16" class="bg-bk text-white">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-6">
-        <div class="flex items-center gap-3">
-            <span class="tag bg-gold text-bk">Partie 3</span>
-            <span class="font-display font-bold text-xl">L'Espace Client</span>
-        </div>
-    </div>
-</section>
-<section id="s16b" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">14</div>
-            <div>
-                <span class="tag bg-gold text-bk mb-2">Le gros morceau</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">L'espace client</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>C'est le gros morceau et c'est la ou le client va passer du temps. C'est une page web accessible sur un sous-domaine separe, par exemple <strong class="text-bk font-mono text-base">app.contedefaits.com</strong>. Je fais ca sur un sous-domaine separe volontairement pour ne pas toucher a votre site WordPress. Ton site reste tel qu'il est, il ne devient pas plus lourd, il n'y a aucun risque de casser quoi que ce soit dessus. L'espace client vit a cote, independamment.</p>
-            <p>Quand le client clique sur le lien dans son mail, il arrive sur cette page. L'acces est securise avec un identifiant lie a sa commande, donc il ne peut voir que ses propres livres, pas ceux des autres clients.</p>
-        </div>
-    </div>
-</section>
 
-<!-- ============ SECTION 17 — DESIGN & UX ============ -->
-<section id="s17" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">15</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Design</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Le design & l'experience</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>La page va avoir le look de Conte de Faits. On garde vos couleurs, votre style, votre logo. Le client ne doit pas avoir l'impression d'aller sur un autre site, il doit se sentir chez vous. Une interface claire, chaleureuse, avec des tons qui correspondent a votre univers. <strong class="text-bk">C'est pas une page technique moche, c'est une vraie experience qui s'inscrit dans le parcours Conte de Faits.</strong></p>
-        </div>
-    </div>
-</section>
+<!-- EXEMPLE A-Z -->
+<section id="exemple" class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">06 — Cas Pratiques</span>
+        <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-6 s-reveal">
+            Un exemple <span class="text-amber italic">de A a Z</span>
+        </h2>
+        <p class="text-lg text-ink/50 max-w-2xl mb-16 s-reveal">Pour que tu visualises bien, je te fais un parcours complet avec un vrai exemple.</p>
 
-<!-- ============ SECTION 18 — GENERATION AVATARS ============ -->
-<section id="s18" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">16</div>
-            <div>
-                <span class="tag bg-gold text-bk mb-2">IA</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Generation d'avatars par IA</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>Une fois connecte, le client voit sa commande. Imaginons que Madame Martin a commande un livre pour sa fille Leonie. Sur la page, elle va voir affiche :</p>
-        </div>
-        <div class="brut p-6 md:p-8 max-w-2xl mt-8 mb-10 reveal">
-            <div class="font-display font-bold text-xl mb-4">Livre 1 — Personnage principal : <span class="text-gold">Leonie</span></div>
-            <div class="space-y-2 font-mono text-sm text-bk/70">
-                <div>Cheveux : chatain, mi-longs</div>
-                <div>Yeux : marrons</div>
-                <div>Particularite : tache de naissance sur la joue droite</div>
-            </div>
-            <div class="mt-6 flex gap-3">
-                <div class="w-16 h-16 bg-gry brd flex items-center justify-center text-2xl">📷</div>
-                <div class="w-16 h-16 bg-gry brd flex items-center justify-center text-2xl">📷</div>
-                <div class="w-16 h-16 bg-gry brd flex items-center justify-center text-2xl">📷</div>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>En dessous, toutes les informations qu'elle a deja remplies dans le formulaire s'affichent automatiquement. Pas besoin de tout re-saisir. Elle voit ses photos, elle peut verifier que tout est correct.</p>
-            <p>Ensuite, il y a un bouton <strong class="text-bk">"Generer mon avatar"</strong>. Elle clique dessus, et en quelques secondes, le systeme utilise l'intelligence artificielle pour creer un avatar de Leonie en style 3D cartoon, en se basant sur les photos et les descriptions physiques. L'avatar apparait en dessous sous forme de vignette.</p>
-            <p>Si le premier avatar ne lui plait pas, pas de souci. Elle peut regenerer. <strong class="text-bk">Elle a entre 3 et 5 essais inclus par personnage.</strong> C'est suffisant pour obtenir un resultat qui correspond, et ca permet de maitriser les couts de generation. A chaque generation, le nouvel avatar s'ajoute a cote des precedents en vignettes carrees. Elle voit tous les avatars generes cote a cote, elle peut comparer, et elle clique sur celui qu'elle prefere pour le selectionner. Un petit cadre ou un check apparait sur l'avatar selectionne pour qu'elle sache lequel est actif.</p>
-        </div>
-        <div class="flex flex-wrap gap-4 mt-10 reveal">
-            <div class="w-20 h-20 bg-gry brd flex items-center justify-center font-mono text-xs text-bk/40 relative transition-all hover:shadow-h-gold hover:-translate-y-1">v1</div>
-            <div class="w-20 h-20 bg-gry brd flex items-center justify-center font-mono text-xs text-bk/40 relative transition-all hover:shadow-h-gold hover:-translate-y-1">v2</div>
-            <div class="w-20 h-20 bg-gold/20 brd-gold flex items-center justify-center font-mono text-xs text-gold font-bold relative transition-all hover:-translate-y-1" style="box-shadow:5px 5px 0 0 #C9A962;">
-                v3 ✓
-            </div>
-            <div class="w-20 h-20 bg-gry brd flex items-center justify-center font-mono text-xs text-bk/40 relative transition-all hover:shadow-h-gold hover:-translate-y-1">v4</div>
-        </div>
-    </div>
-</section>
+        <div class="relative pl-12 md:pl-16 max-w-3xl mb-24">
+            <div class="tl-line"></div>
 
-<!-- ============ SECTION 19 — SELECTION & VALIDATION ============ -->
-<section id="s19" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">17</div>
-            <div>
-                <span class="tag bg-grn text-white mb-2">Validation</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Selection & validation finale</h2>
+            <div class="mb-12 relative s-reveal">
+                <div class="tl-dot"></div>
+                <div class="neo bg-white p-6 md:p-8">
+                    <div class="font-mono text-xs text-amber tracking-wider uppercase mb-3">Lundi 14h — Commande</div>
+                    <p class="text-base leading-relaxed text-ink/70">
+                        Monsieur Durand est sur votre site. Il commande un livre pour son fils Nolan, 6 ans. Il remplit le formulaire : Nolan, cheveux blonds, courts, yeux bleus, pas de lunettes, une cicatrice sur le front (il est tombe du velo l'ete dernier et il en est fier). Il uploade 3 photos de Nolan. Il ajoute un personnage secondaire, le chien de la famille, Rocky, un golden retriever. Il uploade 2 photos de Rocky. Il choisit le style graphique 3D cartoon, le format Noble. Il ecrit quelques phrases sur l'histoire qu'il veut : <em class="text-amber">"Nolan et Rocky partent a la recherche d'un tresor cache dans la foret derriere la maison de mamie."</em> Il paye.
+                    </p>
+                </div>
             </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>Une fois que tous les personnages ont leur avatar selectionne, un bouton <strong class="text-bk">"Je valide tous mes avatars"</strong> apparait en bas de page. Elle clique, une petite confirmation lui demande "Tu es sur ? On part sur ces avatars pour creer ton livre." Elle confirme, et c'est termine de son cote.</p>
-            <p>Elle voit un message du genre <strong class="text-bk">"Merci ! Tes avatars ont bien ete envoyes a notre equipe. On s'occupe de tout maintenant."</strong></p>
-            <p>A ce moment-la, de votre cote, les avatars valides arrivent directement dans votre Google Drive, dans un dossier bien nomme avec l'identifiant du livre. Mickael ouvre le Drive, il a les avatars tout prets, il sait que le client les a valides, il peut commencer a bosser sur les scenes tout de suite. <strong class="text-bk">Zero allers-retours, zero mauvaises surprises.</strong></p>
-        </div>
-    </div>
-</section>
 
-<!-- ============ SECTION 20 — PERSONNAGES SECONDAIRES ============ -->
-<section id="s20" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">18</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Multi-perso</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Les personnages secondaires</h2>
+            <div class="mb-12 relative s-reveal">
+                <div class="tl-dot"></div>
+                <div class="neo bg-white p-6 md:p-8">
+                    <div class="font-mono text-xs text-amber tracking-wider uppercase mb-3">Lundi 14h01 — Automatisation</div>
+                    <p class="text-base leading-relaxed text-ink/70">
+                        Le systeme detecte le paiement automatiquement. Il cree un identifiant unique pour ce livre, mettons <span class="font-mono font-bold text-ink">CDF-202602-00087</span>. L'etat du livre passe a "paye" puis immediatement a "avatars en attente". Un mail part a Monsieur Durand : "Merci pour ta commande ! Cree les avatars de Nolan et Rocky maintenant, ca prend 5 minutes."
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb-12 relative s-reveal">
+                <div class="tl-dot"></div>
+                <div class="neo bg-white p-6 md:p-8">
+                    <div class="font-mono text-xs text-amber tracking-wider uppercase mb-3">Lundi 14h30 — Creation avatars</div>
+                    <p class="text-base leading-relaxed text-ink/70">
+                        Monsieur Durand est dans le metro, il ouvre le mail sur son telephone. Il clique sur le lien. L'espace client s'ouvre sur son navigateur mobile. La page est responsive, elle s'affiche bien sur telephone. Il voit son livre, le personnage Nolan avec toutes les infos qu'il a remplies, et les photos de Nolan. Il clique sur "Generer l'avatar". Quelques secondes plus tard, un avatar 3D de Nolan apparait. Les cheveux sont blonds, les yeux bleus, mais la cicatrice n'y est pas. Il regenere. Deuxieme essai : cette fois la cicatrice est la, le visage ressemble plus. Il est content. Il selectionne cet avatar.
+                    </p>
+                    <p class="text-base leading-relaxed text-ink/70 mt-4">
+                        Il descend sur Rocky. Il genere l'avatar du golden retriever. Premier essai : parfait, c'est tout a fait Rocky. Il selectionne.
+                    </p>
+                    <p class="text-base leading-relaxed text-ink/70 mt-4">
+                        Il clique sur "Je valide tous mes avatars". Confirmation. C'est fait.
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative s-reveal">
+                <div class="tl-dot" style="background:#34d399;"></div>
+                <div class="neo-amber bg-cream p-6 md:p-8">
+                    <div class="font-mono text-xs text-mint tracking-wider uppercase mb-3">Lundi 14h35 — Termine</div>
+                    <p class="text-base leading-relaxed text-ink/70">
+                        De votre cote, l'etat du livre passe a "avatars valides". Dans le Google Drive, un dossier CDF-202602-00087 contient les deux avatars selectionnes : Nolan et Rocky. Mickael peut commencer a travailler.
+                    </p>
+                    <p class="text-base leading-relaxed text-ink font-semibold mt-4">
+                        Tout ca sans qu'aucun de vous n'ait eu besoin de telecharger des photos, renommer des fichiers, envoyer des mails, attendre une reponse, refaire des avatars. Monsieur Durand a fait ca en 5 minutes dans le metro et il est content parce qu'il a choisi lui-meme.
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-10 reveal">
-            <p>Si la commande comporte des personnages secondaires, c'est le meme principe. En dessous de Leonie, elle va voir par exemple :</p>
-        </div>
-        <div class="space-y-4 max-w-2xl reveal">
-            <div class="brut p-6">
-                <div class="font-display font-bold text-lg mb-2">Personnage secondaire 1 : <span class="text-gold">Papa (Julien)</span></div>
-                <div class="font-mono text-sm text-bk/60">Cheveux : bruns, courts. Barbe : oui. Lunettes : non.</div>
-                <p class="text-sm text-bk/70 mt-3">Et elle fait pareil : elle genere l'avatar de Julien, elle choisit celui qui lui plait, elle selectionne.</p>
+
+        <!-- CAS LEFEVRE -->
+        <div class="max-w-3xl">
+            <h3 class="font-serif font-bold text-2xl mb-6 s-reveal">Le cas relance — <span class="text-amber italic">Madame Lefevre</span></h3>
+            <p class="text-lg text-ink/60 mb-8 s-reveal">Maintenant, prenons un autre cas. Madame Lefevre commande lundi aussi, mais elle ne lit pas ses mails tout de suite.</p>
+
+            <div class="space-y-3 mb-10">
+                <div class="neo bg-white p-5 flex items-start gap-4 s-reveal">
+                    <span class="sticker bg-mint text-ink border-ink shrink-0" style="transform:rotate(0);font-size:0.55rem;">Lundi</span>
+                    <p class="text-sm text-ink/60">Mail #1 envoye. Pas de reaction.</p>
+                </div>
+                <div class="neo bg-white p-5 flex items-start gap-4 s-reveal">
+                    <span class="sticker bg-amber text-ink border-ink shrink-0" style="transform:rotate(0);font-size:0.55rem;">Mar 14h</span>
+                    <p class="text-sm text-ink/60">Elle recoit le mail de relance. "N'oublie pas de creer tes avatars."</p>
+                </div>
+                <div class="neo bg-white p-5 flex items-start gap-4 s-reveal">
+                    <span class="sticker bg-coral text-white border-ink shrink-0" style="transform:rotate(0);font-size:0.55rem;">Mer 14h</span>
+                    <p class="text-sm text-ink/60">Dernier rappel. "C'est notre dernier message, si on n'a pas de retour, on s'en occupe nous-memes."</p>
+                </div>
+                <div class="neo-amber bg-cream p-5 flex items-start gap-4 s-reveal">
+                    <span class="sticker bg-ink text-amber border-ink shrink-0" style="transform:rotate(0);font-size:0.55rem;">Mer 18h</span>
+                    <p class="text-sm text-ink/70 font-medium">Elle finit par cliquer, elle cree ses avatars, elle valide. Vous recevez tout dans le Drive.</p>
+                </div>
             </div>
-            <div class="brut p-6">
-                <div class="font-display font-bold text-lg mb-2">Personnage secondaire 2 : <span class="text-gold">Doudou (Monsieur Lapin)</span></div>
-                <p class="text-sm text-bk/70 mt-3">Et la aussi, meme process. Que ce soit un humain, un animal, un doudou, le systeme gere.</p>
+
+            <div class="neo bg-white p-8 s-reveal">
+                <p class="text-base leading-relaxed text-ink/60">
+                    Et si elle n'avait jamais clique ? Vous le voyez dans l'administration. Le livre est toujours en etat "avatars en attente" depuis 3 jours. Mickael peut le prendre en main manuellement comme avant. Mais dans la grande majorite des cas, <strong class="text-ink font-semibold">les clients vont le faire eux-memes parce que c'est simple et rapide.</strong>
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ============ SECTION 21 — EXEMPLE MONSIEUR DURAND ============ -->
-<section id="s21" class="bg-bk text-white">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-6">
-        <div class="flex items-center gap-3">
-            <span class="tag bg-gold text-bk">Exemples Concrets</span>
-            <span class="font-display font-bold text-xl">De A a Z</span>
-        </div>
-    </div>
-</section>
-<section id="s21b" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">19</div>
-            <div>
-                <span class="tag bg-grn text-white mb-2">Cas #1</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Monsieur Durand & Nolan</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl mb-8 reveal">
-            <p class="text-base md:text-lg text-bk/75 leading-relaxed">Pour que tu visualises bien, je te fais un parcours complet avec un vrai exemple.</p>
-        </div>
 
-        <!-- Timeline -->
-        <div class="relative max-w-3xl pl-14 md:pl-16 reveal">
-            <div class="timeline-line"></div>
+<!-- STACK TECHNIQUE -->
+<section class="bg-ink text-paper py-24 md:py-40 border-y-2 border-ink">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">07 — Stack Technique</span>
+        <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-6 s-reveal">
+            Les outils & la <span class="text-amber italic">technique</span>
+        </h2>
+        <p class="text-lg text-paper/50 max-w-2xl mb-16 s-reveal">Pour que tout ca tourne, voici ce que j'utilise.</p>
 
-            <!-- Step 1 -->
-            <div class="mb-10 relative">
-                <div class="absolute -left-14 md:-left-16 number-badge w-[36px] h-[36px] md:w-[48px] md:h-[48px] text-xs md:text-sm" style="background:#C9A962;color:#1a1a1a;">14h</div>
-                <div class="brut p-6">
-                    <div class="font-mono text-xs text-bk/50 uppercase tracking-wider mb-2">Lundi 14h — Commande</div>
-                    <p class="text-bk/75 leading-relaxed">Monsieur Durand est sur votre site. Il commande un livre pour son fils Nolan, 6 ans. Il remplit le formulaire : Nolan, cheveux blonds, courts, yeux bleus, pas de lunettes, une cicatrice sur le front (il est tombe du velo l'ete dernier et il en est fier). Il uploade 3 photos de Nolan. Il ajoute un personnage secondaire, le chien de la famille, Rocky, un golden retriever. Il uploade 2 photos de Rocky. Il choisit le style graphique 3D cartoon, le format Noble. Il ecrit quelques phrases sur l'histoire qu'il veut : <em class="text-gold">"Nolan et Rocky partent a la recherche d'un tresor cache dans la foret derriere la maison de mamie."</em> Il paye.</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="border-2 border-paper/10 p-8 hover:border-amber transition-colors group s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pill border-paper/20 text-paper/40 group-hover:border-amber group-hover:text-amber transition-colors">n8n</span>
+                    <span class="font-mono text-[0.6rem] text-paper/20">Auto-heberge</span>
                 </div>
+                <p class="text-sm text-paper/50 leading-relaxed">
+                    C'est le chef d'orchestre de tout le systeme. C'est un outil d'automatisation open source qui tourne sur un serveur a vous. C'est lui qui detecte les paiements, qui envoie les mails, qui gere les relances, qui met a jour les etats des livres, qui envoie les avatars dans le Drive. L'avantage d'avoir ca auto-heberge plutot que sur un service comme Make ou Zapier, c'est que toutes les donnees restent chez vous. Vu que vous manipulez des photos d'enfants, c'est important pour le RGPD. Et en plus, ca coute beaucoup moins cher a l'echelle. On parle de 50 a 80 euros par mois pour le serveur, contre 300 a 800 euros par mois sur les alternatives.
+                </p>
             </div>
-
-            <!-- Step 2 -->
-            <div class="mb-10 relative">
-                <div class="absolute -left-14 md:-left-16 number-badge w-[36px] h-[36px] md:w-[48px] md:h-[48px] text-xs md:text-sm">14h01</div>
-                <div class="brut p-6">
-                    <div class="font-mono text-xs text-bk/50 uppercase tracking-wider mb-2">Lundi 14h01 — Automatisation</div>
-                    <p class="text-bk/75 leading-relaxed">Le systeme detecte le paiement automatiquement. Il cree un identifiant unique pour ce livre, mettons <strong class="font-mono text-bk">CDF-202602-00087</strong>. L'etat du livre passe a "paye" puis immediatement a "avatars en attente". Un mail part a Monsieur Durand : "Merci pour ta commande ! Cree les avatars de Nolan et Rocky maintenant, ca prend 5 minutes."</p>
+            <div class="border-2 border-paper/10 p-8 hover:border-amber transition-colors group s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pill border-paper/20 text-paper/40 group-hover:border-amber group-hover:text-amber transition-colors">Claude API</span>
+                    <span class="font-mono text-[0.6rem] text-paper/20">Anthropic</span>
                 </div>
+                <p class="text-sm text-paper/50 leading-relaxed">
+                    C'est l'intelligence artificielle qui va aider a la generation des avatars et au traitement des donnees. Le gros avantage de Claude par rapport a d'autres IA, c'est qu'Anthropic ne reutilise pas les donnees des appels API pour entrainer ses modeles. Les prenoms des enfants, les histoires de famille, tout ca reste confidentiel. C'est pas juste un argument commercial, c'est une garantie technique.
+                </p>
             </div>
-
-            <!-- Step 3 -->
-            <div class="mb-10 relative">
-                <div class="absolute -left-14 md:-left-16 number-badge w-[36px] h-[36px] md:w-[48px] md:h-[48px] text-xs md:text-sm" style="background:#C9A962;color:#1a1a1a;">14h30</div>
-                <div class="brut p-6">
-                    <div class="font-mono text-xs text-bk/50 uppercase tracking-wider mb-2">Lundi 14h30 — Creation avatar</div>
-                    <p class="text-bk/75 leading-relaxed">Monsieur Durand est dans le metro, il ouvre le mail sur son telephone. Il clique sur le lien. L'espace client s'ouvre sur son navigateur mobile. La page est responsive, elle s'affiche bien sur telephone. Il voit son livre, le personnage Nolan avec toutes les infos qu'il a remplies, et les photos de Nolan. Il clique sur "Generer l'avatar". Quelques secondes plus tard, un avatar 3D de Nolan apparait. Les cheveux sont blonds, les yeux bleus, mais la cicatrice n'y est pas. Il regenere. Deuxieme essai : cette fois la cicatrice est la, le visage ressemble plus. Il est content. Il selectionne cet avatar.</p>
-                    <p class="text-bk/75 leading-relaxed mt-3">Il descend sur Rocky. Il genere l'avatar du golden retriever. Premier essai : parfait, c'est tout a fait Rocky. Il selectionne.</p>
-                    <p class="text-bk/75 leading-relaxed mt-3">Il clique sur "Je valide tous mes avatars". Confirmation. C'est fait.</p>
+            <div class="border-2 border-paper/10 p-8 hover:border-amber transition-colors group s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pill border-paper/20 text-paper/40 group-hover:border-amber group-hover:text-amber transition-colors">WordPress</span>
+                    <span class="font-mono text-[0.6rem] text-paper/20">+ WooCommerce</span>
                 </div>
+                <p class="text-sm text-paper/50 leading-relaxed">
+                    Votre site reste tel qu'il est. Je rajoute juste une table dans la base de donnees pour stocker les informations des livres (identifiant, etat, dates, etc.) et des points de connexion pour que n8n puisse communiquer avec le site. Votre WPForms continue de fonctionner comme avant.
+                </p>
             </div>
-
-            <!-- Step 4 -->
-            <div class="relative">
-                <div class="absolute -left-14 md:-left-16 number-badge w-[36px] h-[36px] md:w-[48px] md:h-[48px] text-xs md:text-sm">14h35</div>
-                <div class="brut p-6 bg-gold/5" style="border-color:#C9A962;box-shadow:5px 5px 0 0 #C9A962;">
-                    <div class="font-mono text-xs text-gold uppercase tracking-wider mb-2">Lundi 14h35 — Termine</div>
-                    <p class="text-bk/75 leading-relaxed">De votre cote, l'etat du livre passe a "avatars valides". Dans le Google Drive, un dossier CDF-202602-00087 contient les deux avatars selectionnes : Nolan et Rocky. Mickael peut commencer a travailler.</p>
-                    <p class="text-bk font-medium mt-3">Tout ca sans qu'aucun de vous n'ait eu besoin de telecharger des photos, renommer des fichiers, envoyer des mails, attendre une reponse, refaire des avatars. Monsieur Durand a fait ca en 5 minutes dans le metro et il est content parce qu'il a choisi lui-meme.</p>
+            <div class="border-2 border-paper/10 p-8 hover:border-amber transition-colors group s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pill border-paper/20 text-paper/40 group-hover:border-amber group-hover:text-amber transition-colors">Google Drive</span>
+                    <span class="font-mono text-[0.6rem] text-paper/20">API</span>
                 </div>
+                <p class="text-sm text-paper/50 leading-relaxed">
+                    Pour envoyer automatiquement les avatars valides dans votre Drive. Le dossier est cree automatiquement avec le bon nom, les fichiers sont ranges dedans. Mickael retrouve tout au bon endroit.
+                </p>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ SECTION 22 — EXEMPLE MADAME LEFEVRE ============ -->
-<section id="s22" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">20</div>
-            <div>
-                <span class="tag bg-gold text-bk mb-2">Cas #2</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Madame Lefevre — Le cas relance</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed reveal">
-            <p>Maintenant, prenons un autre cas. Madame Lefevre commande lundi aussi, mais elle ne lit pas ses mails tout de suite.</p>
-        </div>
-
-        <div class="max-w-2xl mt-10 space-y-4 reveal">
-            <div class="brut p-5 flex items-start gap-4">
-                <span class="tag bg-grn text-white shrink-0 mt-1">Lun</span>
-                <p class="text-bk/70 text-sm">Mail #1 envoye automatiquement apres paiement. Pas de reaction.</p>
-            </div>
-            <div class="brut p-5 flex items-start gap-4">
-                <span class="tag bg-gold text-bk shrink-0 mt-1">Mar 14h</span>
-                <p class="text-bk/70 text-sm">Elle recoit le mail de relance. "N'oublie pas de creer tes avatars."</p>
-            </div>
-            <div class="brut p-5 flex items-start gap-4">
-                <span class="tag bg-red text-white shrink-0 mt-1">Mer 14h</span>
-                <p class="text-bk/70 text-sm">Dernier rappel. "C'est notre dernier message, si on n'a pas de retour, on s'en occupe nous-memes."</p>
-            </div>
-            <div class="brut p-5 flex items-start gap-4 bg-gold/5" style="border-color:#C9A962;box-shadow:5px 5px 0 0 #C9A962;">
-                <span class="tag bg-bk text-gold shrink-0 mt-1">Mer 18h</span>
-                <p class="text-bk/70 text-sm">Elle finit par cliquer, elle cree ses avatars, elle valide. Vous recevez tout dans le Drive.</p>
-            </div>
-        </div>
-
-        <div class="max-w-3xl mt-10 brut p-6 reveal">
-            <p class="text-bk/75 leading-relaxed">Et si elle n'avait jamais clique ? Vous le voyez dans l'administration. Le livre est toujours en etat "avatars en attente" depuis 3 jours. Mickael peut le prendre en main manuellement comme avant. Mais dans la grande majorite des cas, <strong class="text-bk">les clients vont le faire eux-memes parce que c'est simple et rapide.</strong></p>
-        </div>
-    </div>
-</section>
-
-<!-- CTA WHATSAPP #2 -->
-<section class="brd-t brd-b bg-bk">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div>
-            <p class="font-display font-bold text-xl md:text-2xl text-white">Tu veux voir une demo en live ?</p>
-            <p class="text-white/40 text-sm mt-1">On peut planifier un appel de 15 minutes.</p>
-        </div>
-        <a href="https://wa.me/33626105640" target="_blank" class="wa-btn">
-            <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Planifier un call
-        </a>
-    </div>
-</section>
-
-<!-- ============ SECTION 23 — OUTILS & TECHNIQUE ============ -->
-<section id="s23" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">21</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Stack</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Les outils & la technique</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl mb-8 reveal">
-            <p class="text-base md:text-lg text-bk/75 leading-relaxed">Pour que tout ca tourne, voici ce que j'utilise :</p>
-        </div>
-        <div class="grid md:grid-cols-2 gap-6 reveal">
-            <div class="brut p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="tag bg-bk text-gold">n8n</span>
-                    <span class="font-mono text-xs text-bk/40">auto-heberge</span>
+            <div class="border-2 border-paper/10 p-8 hover:border-amber transition-colors group s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pill border-paper/20 text-paper/40 group-hover:border-amber group-hover:text-amber transition-colors">HubSpot</span>
                 </div>
-                <p class="text-sm text-bk/70 leading-relaxed">C'est le chef d'orchestre de tout le systeme. C'est un outil d'automatisation open source qui tourne sur un serveur a vous. C'est lui qui detecte les paiements, qui envoie les mails, qui gere les relances, qui met a jour les etats des livres, qui envoie les avatars dans le Drive. L'avantage d'avoir ca auto-heberge plutot que sur un service comme Make ou Zapier, c'est que toutes les donnees restent chez vous. Vu que vous manipulez des photos d'enfants, c'est important pour le RGPD. Et en plus, ca coute beaucoup moins cher a l'echelle. On parle de 50 a 80 euros par mois pour le serveur, contre 300 a 800 euros par mois sur les alternatives.</p>
+                <p class="text-sm text-paper/50 leading-relaxed">
+                    On garde votre HubSpot tel quel pour le suivi commercial. Le systeme met a jour le statut dans HubSpot aussi, comme ca vous avez la vue d'ensemble.
+                </p>
             </div>
-            <div class="brut p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="tag bg-bk text-gold">Claude API</span>
-                    <span class="font-mono text-xs text-bk/40">Anthropic</span>
+            <div class="border-2 border-paper/10 p-8 hover:border-amber transition-colors group s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pill border-paper/20 text-paper/40 group-hover:border-amber group-hover:text-amber transition-colors">Espace Client</span>
+                    <span class="font-mono text-[0.6rem] text-paper/20">App Web</span>
                 </div>
-                <p class="text-sm text-bk/70 leading-relaxed">C'est l'intelligence artificielle qui va aider a la generation des avatars et au traitement des donnees. Le gros avantage de Claude par rapport a d'autres IA, c'est qu'Anthropic ne reutilise pas les donnees des appels API pour entrainer ses modeles. Les prenoms des enfants, les histoires de famille, tout ca reste confidentiel. C'est pas juste un argument commercial, c'est une garantie technique.</p>
-            </div>
-            <div class="brut p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="tag bg-bk text-gold">WordPress</span>
-                    <span class="font-mono text-xs text-bk/40">+ WooCommerce</span>
-                </div>
-                <p class="text-sm text-bk/70 leading-relaxed">Votre site reste tel qu'il est. Je rajoute juste une table dans la base de donnees pour stocker les informations des livres (identifiant, etat, dates, etc.) et des points de connexion pour que n8n puisse communiquer avec le site. Votre WPForms continue de fonctionner comme avant.</p>
-            </div>
-            <div class="brut p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="tag bg-bk text-gold">Google Drive</span>
-                    <span class="font-mono text-xs text-bk/40">API</span>
-                </div>
-                <p class="text-sm text-bk/70 leading-relaxed">Pour envoyer automatiquement les avatars valides dans votre Drive. Le dossier est cree automatiquement avec le bon nom, les fichiers sont ranges dedans. Mickael retrouve tout au bon endroit.</p>
-            </div>
-            <div class="brut p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="tag bg-bk text-gold">HubSpot</span>
-                </div>
-                <p class="text-sm text-bk/70 leading-relaxed">On garde votre HubSpot tel quel pour le suivi commercial. Le systeme met a jour le statut dans HubSpot aussi, comme ca vous avez la vue d'ensemble.</p>
-            </div>
-            <div class="brut p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="tag bg-bk text-gold">Espace Client</span>
-                    <span class="font-mono text-xs text-bk/40">App Web</span>
-                </div>
-                <p class="text-sm text-bk/70 leading-relaxed">C'est une application web moderne, legere, rapide. Elle est hebergee separement de WordPress pour ne pas alourdir votre site. Elle communique avec WordPress et n8n par des API pour recuperer les donnees et envoyer les validations. L'interface reprend vos couleurs, votre logo, votre identite visuelle. C'est une vraie page Conte de Faits, pas un formulaire Google.</p>
+                <p class="text-sm text-paper/50 leading-relaxed">
+                    C'est une application web moderne, legere, rapide. Elle est hebergee separement de WordPress pour ne pas alourdir votre site. Elle communique avec WordPress et n8n par des API pour recuperer les donnees et envoyer les validations. L'interface reprend vos couleurs, votre logo, votre identite visuelle. C'est une vraie page Conte de Faits, pas un formulaire Google.
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ============ SECTION 24 — ROI ============ -->
-<section id="s24" class="bg-bk text-white brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge" style="background:#C9A962;color:#1a1a1a;">22</div>
-            <div>
-                <span class="tag bg-gold text-bk mb-2">Impact</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Ce que ca change au quotidien</h2>
-            </div>
-        </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-white/70 leading-relaxed mb-12 reveal">
-            <p>Faisons le calcul sur une base de <strong class="text-gold">100 livres par mois</strong>, ce qui correspond a peu pres a ce que vous commencez a avoir.</p>
-            <p>Aujourd'hui, pour chaque livre, Mickael passe environ 10 a 15 minutes a telecharger les photos, les renommer, creer les avatars. Toi tu passes 5 a 10 minutes a envoyer le resultat au client, attendre sa reponse, gerer les retours. Et dans peut-etre 20 ou 30% des cas, il faut refaire les avatars parce que le client n'est pas satisfait, ce qui rajoute 15 a 20 minutes.</p>
+
+<!-- IMPACT / ROI -->
+<section id="impact" class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">08 — Impact</span>
+        <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-6 s-reveal">
+            Ce que ca <span class="text-amber italic">change</span>
+        </h2>
+        <p class="text-lg text-ink/50 max-w-2xl mb-16 s-reveal">Faisons le calcul sur une base de 100 livres par mois, ce qui correspond a peu pres a ce que vous commencez a avoir.</p>
+
+        <div class="max-w-3xl mb-16 s-reveal">
+            <p class="text-lg leading-relaxed text-ink/60">
+                Aujourd'hui, pour chaque livre, Mickael passe environ 10 a 15 minutes a telecharger les photos, les renommer, creer les avatars. Toi tu passes 5 a 10 minutes a envoyer le resultat au client, attendre sa reponse, gerer les retours. Et dans peut-etre 20 ou 30% des cas, il faut refaire les avatars parce que le client n'est pas satisfait, ce qui rajoute 15 a 20 minutes.
+            </p>
         </div>
 
-        <div class="grid sm:grid-cols-2 gap-6 mb-12 reveal">
-            <div class="border-2 border-white/10 p-6">
-                <div class="font-mono text-xs text-red uppercase tracking-wider mb-4">Avant — Par commande</div>
-                <div class="space-y-3 text-sm text-white/60">
-                    <div class="flex justify-between"><span>Telecharger & renommer photos</span><span class="text-red font-mono">10-15 min</span></div>
-                    <div class="flex justify-between"><span>Creer les avatars</span><span class="text-red font-mono">10-15 min</span></div>
-                    <div class="flex justify-between"><span>Envoyer au client</span><span class="text-red font-mono">5-10 min</span></div>
-                    <div class="flex justify-between"><span>Gerer les retours (20-30%)</span><span class="text-red font-mono">15-20 min</span></div>
-                    <div class="flex justify-between"><span>Relances manuelles</span><span class="text-red font-mono">5-10 min</span></div>
-                    <div class="flex justify-between"><span>Suivi commande</span><span class="text-red font-mono">10-15 min</span></div>
+        <div class="grid lg:grid-cols-2 gap-6 mb-16">
+            <div class="neo bg-white p-8 s-reveal">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="sticker bg-coral text-white border-ink" style="transform:rotate(0);">Avant</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Telecharger & renommer photos</span><span class="font-mono text-sm text-coral font-bold">10-15 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Creer les avatars</span><span class="font-mono text-sm text-coral font-bold">10-15 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Envoyer au client pour validation</span><span class="font-mono text-sm text-coral font-bold">5-10 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Gerer les retours avatar (20-30%)</span><span class="font-mono text-sm text-coral font-bold">15-20 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Relances par mail</span><span class="font-mono text-sm text-coral font-bold">5-10 min</span></div>
+                    <div class="flex justify-between items-center"><span class="text-sm text-ink/60">Suivi de chaque commande</span><span class="font-mono text-sm text-coral font-bold">10-15 min</span></div>
                 </div>
             </div>
-            <div class="border-2 border-gold p-6">
-                <div class="font-mono text-xs text-grn uppercase tracking-wider mb-4">Apres — Par commande</div>
-                <div class="space-y-3 text-sm text-white/60">
-                    <div class="flex justify-between"><span>Telecharger & renommer photos</span><span class="text-grn font-mono font-bold">0 min</span></div>
-                    <div class="flex justify-between"><span>Creer les avatars</span><span class="text-grn font-mono font-bold">0 min</span></div>
-                    <div class="flex justify-between"><span>Envoyer au client</span><span class="text-grn font-mono font-bold">0 min</span></div>
-                    <div class="flex justify-between"><span>Gerer les retours</span><span class="text-grn font-mono font-bold">0 min</span></div>
-                    <div class="flex justify-between"><span>Relances mail</span><span class="text-grn font-mono font-bold">0 min</span></div>
-                    <div class="flex justify-between"><span>Suivi commande</span><span class="text-grn font-mono font-bold">2 min</span></div>
+            <div class="neo bg-white p-8 s-reveal" style="border-color:#d4a843;box-shadow:6px 6px 0 #d4a843;">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="sticker bg-mint text-ink border-ink" style="transform:rotate(0);">Apres</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Telecharger & renommer photos</span><span class="font-mono text-sm text-mint font-bold">0 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Creer les avatars</span><span class="font-mono text-sm text-mint font-bold">0 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Envoyer au client pour validation</span><span class="font-mono text-sm text-mint font-bold">0 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Gerer les retours avatar</span><span class="font-mono text-sm text-mint font-bold">0 min</span></div>
+                    <div class="flex justify-between items-center pb-3 border-b border-ink/10"><span class="text-sm text-ink/60">Relances mail</span><span class="font-mono text-sm text-mint font-bold">0 min</span></div>
+                    <div class="flex justify-between items-center"><span class="text-sm text-ink/60">Suivi de chaque commande</span><span class="font-mono text-sm text-mint font-bold">2 min</span></div>
                 </div>
             </div>
         </div>
 
-        <div class="brut-gold p-8 md:p-10 max-w-xl reveal" style="background:#1a1a1a;">
-            <div class="font-display font-black text-5xl md:text-6xl text-gold mb-3">35-45h</div>
-            <div class="font-mono text-sm text-white/60 uppercase tracking-wider mb-4">Economisees par mois sur 100 livres</div>
-            <p class="text-white/70 text-sm leading-relaxed">C'est presque une semaine complete de travail. Du temps que Mickael peut mettre sur la creation des scenes, la mise en page, la qualite. Du temps que toi tu peux mettre sur le commercial, le B2B, les investisseurs, les nouvelles fonctionnalites.</p>
-            <p class="text-white/70 text-sm leading-relaxed mt-3">Et au-dela du temps, il y a la tranquillite. Plus de "est-ce que j'ai bien envoye le mail a ce client ?". Plus de "est-ce qu'il a valide ou pas ?". Plus de "mince, les cheveux sont pas de la bonne couleur, on recommence". Le client fait le choix lui-meme, il est content du premier coup parce que c'est lui qui a decide.</p>
+        <div class="neo bg-ink text-paper p-10 md:p-16 text-center max-w-2xl mx-auto s-reveal">
+            <div class="font-serif font-black text-7xl md:text-9xl text-amber counter" data-target="45" data-suffix="h">0</div>
+            <div class="font-mono text-sm text-paper/40 uppercase tracking-widest mt-4">Economisees par mois</div>
+            <div class="w-16 h-[2px] bg-amber mx-auto my-6"></div>
+            <p class="text-paper/50 leading-relaxed max-w-lg mx-auto">
+                C'est presque une semaine complete de travail. Du temps que Mickael peut mettre sur la creation des scenes, la mise en page, la qualite. Du temps que toi tu peux mettre sur le commercial, le B2B, les investisseurs, les nouvelles fonctionnalites.
+            </p>
+            <p class="text-paper/50 leading-relaxed max-w-lg mx-auto mt-4">
+                Et au-dela du temps, il y a la tranquillite. Plus de "est-ce que j'ai bien envoye le mail a ce client ?". Plus de "est-ce qu'il a valide ou pas ?". Plus de "mince, les cheveux sont pas de la bonne couleur, on recommence". Le client fait le choix lui-meme, il est content du premier coup parce que c'est lui qui a decide.
+            </p>
         </div>
     </div>
 </section>
 
-<!-- ============ SECTION 25 — BUDGET ============ -->
-<section id="s25" class="brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">23</div>
-            <div>
-                <span class="tag bg-gold text-bk mb-2">Investissement</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">Le budget</h2>
-            </div>
-        </div>
-        <div class="grid md:grid-cols-2 gap-8 items-start">
-            <div class="reveal">
-                <div class="brut p-8 text-center mb-6">
-                    <div class="font-display font-black text-5xl md:text-6xl text-bk mb-2">4 500<span class="text-gold">&euro;</span></div>
-                    <div class="font-mono text-xs text-bk/50 uppercase tracking-wider">HT — Forfait complet</div>
+<div class="divider max-w-[1400px] mx-auto"></div>
+
+
+<!-- BUDGET -->
+<section id="budget" class="py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div class="grid lg:grid-cols-12 gap-16 items-start">
+            <div class="lg:col-span-5 s-reveal">
+                <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4">09 — Investissement</span>
+                <h2 class="font-serif font-black text-4xl md:text-5xl leading-[1.05] mb-6">
+                    Le <span class="text-amber italic">budget</span>
+                </h2>
+                <div class="w-16 h-1 bg-amber mb-8"></div>
+                <div class="neo bg-white p-10 text-center">
+                    <div class="font-serif font-black text-6xl md:text-7xl text-ink">4 500<span class="text-amber">&euro;</span></div>
+                    <div class="font-mono text-xs text-ink/40 uppercase tracking-widest mt-2">HT — Forfait complet</div>
                 </div>
-                <div class="space-y-3">
-                    <div class="brut p-4 flex items-center gap-3">
-                        <span class="tag bg-bk text-gold text-[0.6rem]">Inclus</span>
-                        <span class="text-sm text-bk/70">Socle technique complet</span>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                <div class="neo bg-white p-6 s-reveal">
+                    <p class="text-lg leading-relaxed text-ink/60">
+                        Tout ca, on est sur 4 500 euros HT. Ca couvre les trois parties : le socle technique, les notifications par mail, et l'espace client complet. Apres livraison, les couts recurrents c'est le serveur pour n8n (50 a 80 euros par mois) et les appels a l'API pour la generation d'avatars, qui dependent du volume mais restent raisonnables.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-3 gap-4 s-reveal">
+                    <div class="neo-sm bg-amber/10 p-5 text-center">
+                        <span class="font-mono text-[0.6rem] text-ink/40 uppercase tracking-wider">Inclus</span>
+                        <div class="font-semibold mt-2 text-sm">Socle Technique</div>
                     </div>
-                    <div class="brut p-4 flex items-center gap-3">
-                        <span class="tag bg-bk text-gold text-[0.6rem]">Inclus</span>
-                        <span class="text-sm text-bk/70">Systeme de notifications mail</span>
+                    <div class="neo-sm bg-amber/10 p-5 text-center">
+                        <span class="font-mono text-[0.6rem] text-ink/40 uppercase tracking-wider">Inclus</span>
+                        <div class="font-semibold mt-2 text-sm">Notifications Mail</div>
                     </div>
-                    <div class="brut p-4 flex items-center gap-3">
-                        <span class="tag bg-bk text-gold text-[0.6rem]">Inclus</span>
-                        <span class="text-sm text-bk/70">Espace client complet</span>
+                    <div class="neo-sm bg-amber/10 p-5 text-center">
+                        <span class="font-mono text-[0.6rem] text-ink/40 uppercase tracking-wider">Inclus</span>
+                        <div class="font-semibold mt-2 text-sm">Espace Client</div>
                     </div>
                 </div>
-            </div>
-            <div class="reveal">
-                <div class="brut p-6 bg-gry">
-                    <div class="font-mono text-xs text-bk/50 uppercase tracking-wider mb-4">Couts recurrents apres livraison</div>
+
+                <div class="neo bg-white p-6 s-reveal">
+                    <div class="font-mono text-xs text-ink/40 uppercase tracking-wider mb-4">Couts recurrents apres livraison</div>
                     <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-medium">Serveur n8n</span>
-                                <span class="font-mono text-sm text-gold font-bold">50-80&euro;/mois</span>
+                        <div class="flex justify-between items-center pb-3 border-b border-ink/10">
+                            <div>
+                                <div class="text-sm font-semibold">Serveur n8n</div>
+                                <div class="text-xs text-ink/40">vs 300-800&euro;/mois sur Make/Zapier</div>
                             </div>
-                            <p class="text-xs text-bk/50">vs 300-800&euro;/mois sur Make/Zapier</p>
+                            <span class="font-mono text-amber font-bold">50-80&euro;/mois</span>
                         </div>
-                        <div class="border-t border-bk/10 pt-4">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-medium">API generation avatars</span>
-                                <span class="font-mono text-sm text-gold font-bold">Variable</span>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-semibold">API generation avatars</div>
+                                <div class="text-xs text-ink/40">Depend du volume, reste raisonnable</div>
                             </div>
-                            <p class="text-xs text-bk/50">Depend du volume, reste raisonnable</p>
+                            <span class="font-mono text-amber font-bold">Variable</span>
                         </div>
                     </div>
                 </div>
@@ -1024,261 +1041,255 @@
     </div>
 </section>
 
-<!-- ============ SECTION 26 — LA SUITE ============ -->
-<section id="s26" class="bg-gry brd-b">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="flex items-center gap-4 mb-10 reveal">
-            <div class="number-badge">24</div>
-            <div>
-                <span class="tag bg-bk text-white mb-2">Roadmap</span>
-                <h2 class="font-display font-black text-3xl md:text-4xl">La suite</h2>
+
+<!-- LA SUITE -->
+<section class="bg-cream border-y-2 border-ink py-24 md:py-40">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+        <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-4 s-reveal">10 — Roadmap</span>
+        <h2 class="font-serif font-black text-4xl md:text-5xl leading-[1.05] mb-8 s-reveal">La <span class="text-amber italic">suite</span></h2>
+
+        <div class="max-w-3xl text-lg text-ink/60 leading-relaxed mb-12 s-reveal">
+            <p>Ca c'est la premiere etape. Une fois que c'est en place et que ca tourne bien, on pourra aller plus loin.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+            <div class="neo bg-white p-6 s-reveal">
+                <div class="font-serif font-black text-3xl text-amber/30 mb-3">P1</div>
+                <div class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-wider mb-2">Actuel</div>
+                <p class="text-sm text-ink/60">Parcours avatar client en self-service</p>
+            </div>
+            <div class="neo bg-white p-6 s-reveal">
+                <div class="font-serif font-black text-3xl text-ink/10 mb-3">P2</div>
+                <div class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-wider mb-2">A venir</div>
+                <p class="text-sm text-ink/60">Automatiser la generation des textes avec votre mega-prompt</p>
+            </div>
+            <div class="neo bg-white p-6 s-reveal">
+                <div class="font-serif font-black text-3xl text-ink/10 mb-3">P3</div>
+                <div class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-wider mb-2">A venir</div>
+                <p class="text-sm text-ink/60">Automatiser la creation des scenes image par image</p>
+            </div>
+            <div class="neo bg-white p-6 s-reveal">
+                <div class="font-serif font-black text-3xl text-ink/10 mb-3">P4</div>
+                <div class="font-mono text-[0.6rem] text-ink/30 uppercase tracking-wider mb-2">A venir</div>
+                <p class="text-sm text-ink/60">Provisioning automatique du Drive avec toute l'arborescence</p>
             </div>
         </div>
-        <div class="max-w-3xl space-y-6 text-base md:text-lg text-bk/75 leading-relaxed mb-10 reveal">
-            <p>Ca c'est la premiere etape. Une fois que c'est en place et que ca tourne bien, on pourra aller plus loin :</p>
-        </div>
-        <div class="grid sm:grid-cols-2 gap-4 max-w-3xl reveal">
-            <div class="brut p-5">
-                <span class="tag bg-bk/10 text-bk/50 mb-3">Phase 2</span>
-                <p class="text-sm text-bk/70 mt-2">Automatiser la generation des textes avec votre mega-prompt</p>
-            </div>
-            <div class="brut p-5">
-                <span class="tag bg-bk/10 text-bk/50 mb-3">Phase 3</span>
-                <p class="text-sm text-bk/70 mt-2">Automatiser la creation des scenes image par image</p>
-            </div>
-            <div class="brut p-5 sm:col-span-2">
-                <span class="tag bg-bk/10 text-bk/50 mb-3">Phase 4</span>
-                <p class="text-sm text-bk/70 mt-2">Mettre en place le provisioning automatique du Drive avec toute l'arborescence</p>
-            </div>
-        </div>
-        <div class="max-w-3xl mt-8 reveal">
-            <p class="text-base md:text-lg text-bk/75 leading-relaxed"><strong class="text-bk">Mais chaque chose en son temps.</strong> On commence par ce qui vous fait gagner le plus de temps tout de suite, et on avance etape par etape.</p>
-        </div>
+
+        <p class="text-lg text-ink/60 max-w-2xl s-reveal"><strong class="text-ink font-semibold">Mais chaque chose en son temps.</strong> On commence par ce qui vous fait gagner le plus de temps tout de suite, et on avance etape par etape.</p>
     </div>
 </section>
 
-<!-- ============ SECTION 27 — CONTACT FINAL ============ -->
-<section id="s27" class="bg-bk text-white">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28 text-center">
-        <div class="reveal">
-            <div class="number-badge mx-auto mb-8" style="background:#C9A962;color:#1a1a1a;">25</div>
-            <h2 class="font-display font-black text-3xl md:text-5xl mb-6">On en discute ?</h2>
-            <p class="text-white/60 text-base md:text-lg max-w-xl mx-auto mb-4 leading-relaxed">Si tu as des questions, la moindre chose qui n'est pas claire, n'hesite pas. Je suis dispo par mail ou par telephone, comme tu preferes.</p>
-            <p class="text-white/60 text-lg mb-10">A tres vite,<br><strong class="text-gold text-xl">Baptiste</strong></p>
-            <a href="https://wa.me/33626105640" target="_blank" class="wa-btn text-lg px-10 py-5 mx-auto inline-flex">
-                <svg class="wa-svg" style="width:28px;height:28px;" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                Discutons sur WhatsApp
+
+<!-- CTA FINAL -->
+<section class="bg-ink text-paper py-24 md:py-40 border-t-2 border-ink">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10 text-center">
+        <div class="s-reveal">
+            <span class="font-mono text-xs text-amber tracking-[0.2em] uppercase block mb-6">Prochaine etape</span>
+            <h2 class="font-serif font-black text-4xl md:text-6xl leading-[1.05] mb-8">
+                On en <span class="text-amber italic">discute</span> ?
+            </h2>
+            <p class="text-lg text-paper/50 max-w-xl mx-auto mb-4 leading-relaxed">
+                Si tu as des questions, la moindre chose qui n'est pas claire, n'hesite pas. Je suis dispo par mail ou par telephone, comme tu preferes.
+            </p>
+            <p class="text-xl text-paper/60 mb-12">A tres vite,<br><span class="font-serif font-bold text-amber text-2xl">Baptiste</span></p>
+
+            <a href="https://wa.me/33626105640" target="_blank" class="mag-btn inline-flex text-lg px-10 py-5 bg-[#25D366] border-[#25D366] text-white cursor-pointer" style="box-shadow:6px 6px 0 rgba(255,255,255,0.2);">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Discuter sur WhatsApp
             </a>
         </div>
     </div>
 </section>
 
+
 <!-- FOOTER -->
-<footer class="brd-t bg-white">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="font-display font-bold text-sm">BAPTISTE<span class="text-gold">/</span>FORT</div>
-        <div class="font-mono text-[0.6rem] text-bk/40 tracking-wider">PROPOSITION TECHNIQUE — CONTE DE FAITS — FEVRIER 2026</div>
+<footer class="border-t-2 border-ink bg-paper py-8">
+    <div class="max-w-[1400px] mx-auto px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span class="font-mono text-sm font-bold">BF<span class="text-amber">_</span></span>
+        <span class="font-mono text-[0.6rem] text-ink/30 tracking-wider uppercase">Proposition Technique — Conte de Faits — Fevrier 2026</span>
     </div>
 </footer>
 
-<!-- ============ SCRIPTS ============ -->
+
+<!-- SCRIPTS -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    // === GSAP ScrollTrigger Reveals ===
+(() => {
+    'use strict';
+
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.utils.toArray('.reveal').forEach((el, i) => {
+    ScrollTrigger.create({
+        trigger: document.body,
+        start: 'top top', end: 'bottom bottom',
+        onUpdate: (self) => {
+            document.getElementById('progress-bar').style.width = (self.progress * 100) + '%';
+        }
+    });
+
+    gsap.utils.toArray('.s-reveal').forEach((el) => {
         gsap.fromTo(el,
-            { opacity: 0, y: 40 },
-            {
-                opacity: 1, y: 0, duration: 0.8,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: el, start: 'top 88%', toggleActions: 'play none none none'
-                }
+            { opacity: 0, y: 50 },
+            { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
             }
         );
     });
 
-    // === Table of Contents Generation ===
-    const tocContainer = document.getElementById('toc-container');
-    const sections = [
-        { id: 's1', label: 'Introduction' },
-        { id: 's3', label: 'Le point de depart' },
-        { id: 's4', label: 'Le probleme concret' },
-        { id: 's5', label: "C'est la que j'interviens" },
-        { id: 's6', label: 'Ce que je vais construire' },
-        { id: 's7b', label: 'Le socle technique' },
-        { id: 's8', label: 'Identifiant unique' },
-        { id: 's9', label: "Suivi d'etat" },
-        { id: 's10', label: 'Connexions automatiques' },
-        { id: 's11b', label: 'Notifications mail' },
-        { id: 's12', label: 'Mail #1 — Post-paiement' },
-        { id: 's13', label: 'Mail #2 — Relance 24h' },
-        { id: 's14', label: 'Mail #3 — Dernier rappel' },
-        { id: 's15', label: 'Intelligence du systeme' },
-        { id: 's16b', label: "L'espace client" },
-        { id: 's17', label: 'Design & experience' },
-        { id: 's18', label: 'Generation avatars IA' },
-        { id: 's19', label: 'Selection & validation' },
-        { id: 's20', label: 'Personnages secondaires' },
-        { id: 's21b', label: 'Exemple — M. Durand' },
-        { id: 's22', label: 'Exemple — Mme Lefevre' },
-        { id: 's23', label: 'Outils & technique' },
-        { id: 's24', label: 'Impact au quotidien' },
-        { id: 's25', label: 'Le budget' },
-        { id: 's26', label: 'La suite' },
-    ];
-    if (tocContainer) {
-        sections.forEach((s, i) => {
-            const a = document.createElement('a');
-            a.href = '#' + s.id;
-            a.className = 'toc-link';
-            a.innerHTML = `<span class="text-gold font-bold mr-2">${String(i + 1).padStart(2, '0')}</span> ${s.label}`;
-            a.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    gsap.utils.toArray('.split-line-inner').forEach((line, i) => {
+        gsap.to(line, {
+            y: 0, duration: 1.2, delay: 0.15 * i,
+            ease: 'power4.out'
+        });
+    });
+
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+        document.addEventListener('mousemove', (e) => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+            dot.style.transform = 'translate(-50%, -50%)';
+        });
+        (function animRing() {
+            rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+            ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+            requestAnimationFrame(animRing);
+        })();
+
+        document.querySelectorAll('a, button, .neo, .pill, .mag-btn, .wa-float').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                ring.classList.add('hovering');
+                gsap.to(dot, { scale: 3, duration: 0.3 });
             });
-            tocContainer.appendChild(a);
+            el.addEventListener('mouseleave', () => {
+                ring.classList.remove('hovering');
+                gsap.to(dot, { scale: 1, duration: 0.3 });
+            });
         });
     }
 
-    // === Nav shrink on scroll ===
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            nav.style.backdropFilter = 'blur(10px)';
-            nav.style.background = 'rgba(255,255,255,0.95)';
-        } else {
-            nav.style.backdropFilter = 'none';
-            nav.style.background = 'white';
-        }
-    });
-
-    // === Easter Egg #1: Logo click counter ===
-    let logoClicks = 0;
-    const logo = document.getElementById('logo-click');
-    logo.addEventListener('click', () => {
-        logoClicks++;
-        if (logoClicks === 5) {
-            logo.innerHTML = '<span class="text-gold">MERCI</span> JOHN';
-            logo.style.transition = 'all 0.3s ease';
-            setTimeout(() => {
-                logo.innerHTML = 'BAPTISTE<span class="text-gold">/</span>FORT';
-            }, 3000);
-            logoClicks = 0;
-        }
-        logo.classList.add('easter-glow');
-        setTimeout(() => logo.classList.remove('easter-glow'), 600);
-    });
-
-    // === Easter Egg #2: Konami Code -> Confetti ===
-    const konamiCode = [38,38,40,40,37,39,37,39,66,65];
-    let konamiIndex = 0;
-    document.addEventListener('keydown', (e) => {
-        if (e.keyCode === konamiCode[konamiIndex]) {
-            konamiIndex++;
-            if (konamiIndex === konamiCode.length) {
-                launchConfetti();
-                konamiIndex = 0;
-            }
-        } else {
-            konamiIndex = 0;
-        }
-    });
-
-    function launchConfetti() {
-        const colors = ['#C9A962', '#e53935', '#43a047', '#4A6FA5', '#1a1a1a', '#E8D5A3'];
-        for (let i = 0; i < 80; i++) {
-            const piece = document.createElement('div');
-            piece.className = 'confetti-piece';
-            piece.style.cssText = `
-                left: ${Math.random() * 100}vw;
-                top: -20px;
-                background: ${colors[Math.floor(Math.random() * colors.length)]};
-                width: ${6 + Math.random() * 10}px;
-                height: ${6 + Math.random() * 10}px;
-                transform: rotate(${Math.random() * 360}deg);
-            `;
-            document.body.appendChild(piece);
-            gsap.to(piece, {
-                y: window.innerHeight + 100,
-                x: (Math.random() - 0.5) * 300,
-                rotation: Math.random() * 720,
-                duration: 2 + Math.random() * 2,
-                ease: 'power1.out',
-                onComplete: () => piece.remove()
-            });
-        }
-    }
-
-    // === Easter Egg #3: Type "conte" -> gold flash ===
-    let typedKeys = '';
-    document.addEventListener('keypress', (e) => {
-        typedKeys += e.key.toLowerCase();
-        if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
-        if (typedKeys.includes('conte')) {
-            typedKeys = '';
-            document.body.style.transition = 'background 0.3s ease';
-            document.body.style.background = '#C9A962';
-            setTimeout(() => { document.body.style.background = '#fafaf8'; }, 400);
-        }
-    });
-
-    // === Easter Egg #4: Console message ===
-    console.log('%c🎨 Conte de Faits × Baptiste Fort', 'font-size:20px;font-weight:bold;color:#C9A962;background:#1a1a1a;padding:10px 20px;');
-    console.log('%cTu lis la console ? Tu es curieux, j\'aime ca. 👀', 'font-size:12px;color:#666;');
-
-    // === Micro-interaction: Number badges pulse on hover ===
-    document.querySelectorAll('.number-badge').forEach(badge => {
-        badge.addEventListener('mouseenter', () => {
-            gsap.to(badge, { scale: 1.15, duration: 0.2, ease: 'back.out(3)' });
-        });
-        badge.addEventListener('mouseleave', () => {
-            gsap.to(badge, { scale: 1, duration: 0.2 });
+    document.querySelectorAll('.counter[data-target]').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        ScrollTrigger.create({
+            trigger: el, start: 'top 85%',
+            onEnter: () => {
+                gsap.to({ val: 0 }, {
+                    val: target, duration: 2, ease: 'power2.out',
+                    onUpdate: function() {
+                        el.textContent = Math.round(this.targets()[0].val) + suffix;
+                    }
+                });
+            }, once: true
         });
     });
 
-    // === Micro-interaction: Tags wiggle on hover ===
-    document.querySelectorAll('.tag').forEach(tag => {
-        tag.addEventListener('mouseenter', () => {
-            gsap.to(tag, {
-                rotation: -2, duration: 0.1, yoyo: true, repeat: 3,
-                onComplete: () => gsap.set(tag, { rotation: 0 })
-            });
-        });
-    });
-
-    // === Micro-interaction: State pills glow ===
-    document.querySelectorAll('.state-pill').forEach(pill => {
-        pill.addEventListener('mouseenter', () => {
-            const dot = pill.querySelector('.state-dot');
-            if (dot) gsap.to(dot, { scale: 1.8, duration: 0.3, yoyo: true, repeat: 1 });
-        });
-    });
-
-    // === Smooth scroll for anchor links ===
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
+            e.preventDefault();
             const target = document.querySelector(a.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            if (target) lenis.scrollTo(target, { offset: -60 });
         });
     });
 
-    // === Parallax subtle on hero ===
-    const hero = document.querySelector('#s1 .brut');
-    if (hero) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            if (scrolled < 800) {
-                hero.style.transform = `translateY(${scrolled * 0.05}px)`;
-            }
-        });
+    // Easter Egg: Logo 5 clicks
+    let logoClicks = 0;
+    const navLogo = document.getElementById('nav-logo');
+    navLogo.addEventListener('click', (e) => {
+        e.preventDefault();
+        logoClicks++;
+        if (logoClicks >= 5) {
+            navLogo.innerHTML = 'MERCI<span class="text-amber">_</span>JOHN';
+            document.body.style.transition = 'background 0.5s';
+            document.body.style.background = '#d4a843';
+            setTimeout(() => {
+                document.body.style.background = '#f5f0eb';
+                navLogo.innerHTML = 'BF<span class="text-amber">_</span>';
+            }, 2000);
+            logoClicks = 0;
+        }
+    });
+
+    // Easter Egg: Konami Code
+    const konami = [38,38,40,40,37,39,37,39,66,65];
+    let ki = 0;
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === konami[ki]) {
+            ki++;
+            if (ki === konami.length) { fireConfetti(); ki = 0; }
+        } else { ki = 0; }
+    });
+
+    function fireConfetti() {
+        const colors = ['#d4a843','#ff6b4a','#34d399','#60a5fa','#f5f0eb','#0a0a0a'];
+        for (let i = 0; i < 100; i++) {
+            const c = document.createElement('div');
+            c.style.cssText = 'position:fixed;top:-10px;left:'+Math.random()*100+'vw;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border:1px solid #0a0a0a;z-index:99999;pointer-events:none;';
+            document.body.appendChild(c);
+            gsap.to(c, {
+                y: window.innerHeight + 100,
+                x: (Math.random()-0.5)*400,
+                rotation: Math.random()*720,
+                duration: 1.5 + Math.random()*2,
+                ease: 'power1.out',
+                onComplete: () => c.remove()
+            });
+        }
     }
-});
+
+    // Easter Egg: Type "conte"
+    let typed = '';
+    document.addEventListener('keypress', (e) => {
+        typed += e.key.toLowerCase();
+        if (typed.length > 20) typed = typed.slice(-20);
+        if (typed.includes('conte')) {
+            typed = '';
+            document.querySelectorAll('.neo, .neo-amber, .neo-sm').forEach(el => {
+                el.style.transition = 'box-shadow 0.3s, border-color 0.3s';
+                el.style.borderColor = '#d4a843';
+                el.style.boxShadow = '6px 6px 0 #d4a843';
+                setTimeout(() => {
+                    el.style.borderColor = '';
+                    el.style.boxShadow = '';
+                }, 1500);
+            });
+        }
+    });
+
+    console.log('%c Conte de Faits x Baptiste Fort ', 'background:#0a0a0a;color:#d4a843;font-size:16px;padding:8px 16px;font-family:monospace;');
+    console.log('%c Curious? J\'aime ca. ', 'color:#64748b;font-size:11px;');
+
+    // WhatsApp pulse
+    const waFloat = document.getElementById('wa-float');
+    setInterval(() => {
+        waFloat.style.boxShadow = '4px 4px 0 #0a0a0a, 0 0 0 4px rgba(37,211,102,0.3)';
+        setTimeout(() => { waFloat.style.boxShadow = '4px 4px 0 #0a0a0a'; }, 1000);
+    }, 5000);
+
+    // Magnetic buttons
+    document.querySelectorAll('.mag-btn').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = 'translate(' + x * 0.15 + 'px, ' + y * 0.15 + 'px)';
+        });
+        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+
+})();
 </script>
 
 </body>
